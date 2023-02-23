@@ -1,6 +1,6 @@
 var httpRequest = require('../utils/httpRequest');
 
-class Wallet{
+module.exports = class networkPower{
     constructor(siad){
         this.httpRequest = new httpRequest(siad);
     }
@@ -29,4 +29,3 @@ class Wallet{
     };
 }*/
 
-module.exports = Wallet;

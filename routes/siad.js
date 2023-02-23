@@ -2,15 +2,17 @@ var express = require('express');
 var router = express.Router();
 var Siad = require('../lib/siad')
 var siad = new Siad({
-    host: 'http://localhost:9980',
-    agent: '',
-    password: '9b71d569094b75d7f023805ec9dcb2d4'
+    host: process.env.SIAD_HOST,
+    agent: process.env.SIAD_AGENT,
+    password: process.env.SIAD_TOKEN
     // other arguments
 })
 
-siad.wallet.statut(function (error, consensusStatus) {
+//console.log(siad)
+siad.wallet.status(function (error, consensusStatus) {
     if (error) {
     // do something
+        console.log(error)
     }
     else {
         console.log(consensusStatus);
@@ -23,7 +25,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/init', function(req, res, next) {
-    res.send("");
+    res.send("1");
 });
 
 module.exports = router;

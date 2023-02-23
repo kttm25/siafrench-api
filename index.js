@@ -6,11 +6,11 @@ var logger = require('morgan');
 var debug = require('debug')('siadmap:server');
 var http = require('http');
 
+require('dotenv').config()
+
 var indexRouter = require('./routes/index');
 var siadRouter = require('./routes/siad');
 const { Console } = require('console');
-
-require('dotenv').config()
 
 var app = express();
 
@@ -47,7 +47,7 @@ app.use(function(err, req, res, next) {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '4001');
+var port = normalizePort(process.env.APP_PORT || '3000');
 app.set('port', port);
 
 /**

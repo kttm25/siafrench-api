@@ -1,5 +1,5 @@
 const axios = require('axios');
-const token = "9b71d569094b75d7f023805ec9dcb2d4"
+const token = "80be61d5dbc06122e84c5f5254b52598"
 const link = 'http://127.0.0.1:9880/wallet/init'
 const data = {
     encryptionpassword:'password',
@@ -30,6 +30,7 @@ axios.post(link, data, options)
     }
   })
   .catch(err => {
-    console.log('Error: ', err.response.data.message);
+    console.log('Error: ', err);
+    //console.log(options)
     //console.log(err)
 });
