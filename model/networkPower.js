@@ -5,9 +5,12 @@ module.exports = class networkPower{
         this.httpRequest = new httpRequest(siad);
     }
 
-    async status() {
-        //console.log(this)
-        return await this.httpRequest.normalPostSync('/wallet/init');
+    async activehosts() {
+        return await this.httpRequest.normalGetSync('/hostdb/active');
+    };
+
+    async consensus() {
+        return await this.httpRequest.normalGetSync('/consensus');
     };
 
     validateTransactionset(){

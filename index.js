@@ -9,7 +9,9 @@ var http = require('http');
 require('dotenv').config()
 
 var indexRouter = require('./routes/index');
+var networkPower = require('./routes/networkPower');
 var siadRouter = require('./routes/siad');
+
 const { Console } = require('console');
 
 var app = express();
@@ -26,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/siad', siadRouter);
+app.use('/networkpower', networkPower);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

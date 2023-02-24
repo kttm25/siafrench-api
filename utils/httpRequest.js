@@ -38,18 +38,15 @@ class httpRequest{
 
         var response, result;
     
-        await axios.post(this.host + path, data, options)
+        return await axios.post(this.host + path, data, options)
             .then(res => {
                 const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
                 console.log('Status Code:', res.status);
                 console.log('Date in Response header:', headerDate);
             
-                const users = res.data;
-            
-                for(user of users) {
-                    console.log(`Got user with id: ${user.id}, name: ${user.name}`);
-                }
-                return result;
+                //const users = res.data;
+        
+                return res.data;
             })
             .catch(err => {
                 //console.log('Error: ', err.response.data.message);
@@ -69,7 +66,9 @@ class httpRequest{
             force:false
         };
 
-        const options = {
+        const config = {
+            method: 'get',
+            url: this.host + path,
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
                 'User-Agent': this.agent
@@ -77,9 +76,9 @@ class httpRequest{
             auth: {
                 username: '',
                 password: this.password
-            },
+            }
         }
-    
+        
         /*if (this.password) {
             var value = 'Basic ' + btoa(':' + this.password);
             options['headers']['Authorization'] = value;
@@ -87,23 +86,20 @@ class httpRequest{
 
         var response, result;
     
-        await axios.get(this.host + path, data, options)
+        return await axios(config)
             .then(res => {
                 const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-                console.log('Status Code:', res.status);
-                console.log('Date in Response header:', headerDate);
+                //console.log('Status Code:', res.status);
+                //console.log('Date in Response header:', headerDate);
             
-                const users = res.data;
-            
-                for(user of users) {
-                    console.log(`Got user with id: ${user.id}, name: ${user.name}`);
-                }
-                return result;
+                //const users = res.data;
+                //console.log(res.data)
+                return res.data;
             })
             .catch(err => {
                 //console.log('Error: ', err.response.data.message);
-                console.log(err)
-                //console.log(options)
+                //console.log(err)
+                throw err;
                 //throw errors.ErrorMessage(err.response.data.message);
         });
     };

@@ -4,8 +4,8 @@ var SiadController = require('../controller/siad')
 
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express' });
+router.get('/storagecapacity', function(req, res, next) {
+    SiadController.networkStorageCapacity(res)
 });
 
 router.get('/init', function(req, res, next) {

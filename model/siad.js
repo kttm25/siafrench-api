@@ -1,5 +1,6 @@
 
-var Wallet = require('../siad-api/wallet');
+var Wallet = require('./wallet');
+var NetworkPower = require('./networkPower');
 
 class Siad{
     constructor(config){
@@ -7,6 +8,7 @@ class Siad{
         this.agent = config.agent,
         this.password = config.password
         this.wallet = new Wallet(this)
+        this.networkPower = new NetworkPower(this)
     }
 
 
