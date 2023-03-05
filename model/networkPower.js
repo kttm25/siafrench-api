@@ -12,6 +12,10 @@ module.exports = class networkPower{
     async consensus() {
         return await this.httpRequest.normalGetSync('/consensus');
     };
+    
+    async consensusblock(block) {
+        return await this.httpRequest.normalGetSync('/consensus/blocks?height=' + block);
+    };
 
     validateTransactionset(){
         return this.httprequest.post('/consensus/validate/transactionset', {});
