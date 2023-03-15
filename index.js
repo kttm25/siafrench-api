@@ -8,10 +8,8 @@ var http = require('http');
 
 require('dotenv').config()
 
-var indexRouter = require('./routes/index');
 var networkPower = require('./routes/networkPower');
 var networkEconomics = require('./routes/networkEconomics');
-var siadRouter = require('./routes/siad');
 
 const { Console } = require('console');
 
