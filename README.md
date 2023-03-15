@@ -4,7 +4,7 @@
 
   <h3 align="center">SIAFRENCH API README</h3>
   <p align="center">
-    An API build to help you to interact with Sia network without deploy noeud
+    An API build to help you to interact with Sia network without deploy node
     <br />
     <a href="https://github.com/kttm25/siafrench/blob/master/README.md"><strong>Explore the docs »</strong></a>
     <br />
