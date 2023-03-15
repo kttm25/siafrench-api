@@ -10,25 +10,26 @@ const siad = new Siad({
     // other arguments
 })
 
+//Get result of siad's consensus request
 async function concensus(res){
     return siad.networkPower.consensus().then(result =>{
         return result;
     }).catch(err =>{
-        //res.send(err)
-        Response._ErrorResponse(res, err.toString(), messages.error)
-    })
-}
-async function concensusBlock(res, block){
-    return siad.networkPower.consensusblock(block).then(result =>{
-        return result;
-    }).catch(err =>{
-        //res.send(err)
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-//console.log(siad)
-async function networkStorageState (res){
+//Get result of siad's consensus block request
+async function concensusBlock(res, block){
+    return siad.networkPower.consensusblock(block).then(result =>{
+        return result;
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get network storage state
+exports.networkStorageState = async function networkStorageState (res){
     siad.networkPower.activehosts().then(result =>{
         if(result.hosts != null){
             var totalstorage = 0;
@@ -46,21 +47,18 @@ async function networkStorageState (res){
                     timestamp:new Date().getTime()
                 })
             }).catch(err =>{
-                //res.send(err)
                 Response._ErrorResponse(res, err.toString(), messages.error)
             })
         }else{
             Response._SuccessResponse(res, null, messages.nohostactive)
         }
-        //res.send({totalstorage: totalstorage})
     }).catch(err =>{
-        //res.send(err)
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-//console.log(siad)
-async function networkActivesHosts(res){
+//Get network actives hosts
+exports.networkActivesHosts = async function networkActivesHosts(res){
     siad.networkPower.activehosts().then(result =>{
         if(result.hosts != null){
             var numberactivestorage = result.hosts.length;
@@ -79,7 +77,6 @@ async function networkActivesHosts(res){
                     timestamp:new Date().getTime()
                 })
             }).catch(err =>{
-                //res.send(err)
                 console.log(err)
                 Response._ErrorResponse(res, err.toString(), messages.error)
             })
@@ -87,15 +84,14 @@ async function networkActivesHosts(res){
         }else{
             Response._SuccessResponse(res, null, messages.nohostactive)
         }
-        //res.send({totalstorage: totalstorage})
     }).catch(err =>{
-        //res.send(err)
         console.log(err)
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-async function networkUsageRatio (res){
+//Get network Usage
+exports.networkUsageRatio = async function networkUsageRatio (res){
     siad.networkPower.activehosts().then(result =>{
         if(result.hosts != null){
             var numberactivehosts = result.hosts.length;
@@ -114,21 +110,19 @@ async function networkUsageRatio (res){
                     timestamp:new Date().getTime()
                 })
             }).catch(err =>{
-                //res.send(err)
                 Response._ErrorResponse(res, err.toString())
             })
             
         }else{
             Response._SuccessResponse(res, null, messages.nohostactive)
         }
-        //res.send({totalstorage: totalstorage})
     }).catch(err =>{
-        //res.send(err)
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-async function networkMiningProfitability (res){
+//Get network Mining Profitability
+exports.networkMiningProfitability = async function networkMiningProfitability (res){
     axios.get("https://whattomine.com/coins/161.json?hr=1.0&p=0.0&fee=0.0&cost=0.0&cost_currency=USD&hcost=0.0&span_br=&span_d=24").then(result =>{
         if(result.data != null){
             var CurrentProfitabilitybyMhs = result.data.estimated_rewards * 1024 * 1024;
@@ -143,24 +137,15 @@ async function networkMiningProfitability (res){
                         latestminingblockrewards : result2.minerpayouts,
                     })
                 }).catch(err =>{
-                    //res.send(err)
                     Response._ErrorResponse(res, err.toString(), messages.error)
                 })
             }).catch(err =>{
-                //res.send(err)
                 Response._ErrorResponse(res, err.toString(), messages.error)
             })
         }else{
             Response._SuccessResponse(res, null, messages.error)
         }
-        //res.send({totalstorage: totalstorage})
     }).catch(err =>{
-        //res.send(err)
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
-
-exports.networkStorageState = networkStorageState;
-exports.networkActivesHosts = networkActivesHosts;
-exports.networkUsageRatio = networkUsageRatio;
-exports.networkMiningProfitability = networkMiningProfitability;

@@ -1,5 +1,6 @@
 var httpRequest = require('../utils/httpRequest');
 
+//Define structure of networkPower object
 module.exports = class networkPower{
     constructor(siad){
         this.httpRequest = new httpRequest(siad);
@@ -21,18 +22,4 @@ module.exports = class networkPower{
         return this.httprequest.post('/consensus/validate/transactionset', {});
     };
 }
-/*function Wallet(siad) {
-    var self = this;
-    this.httpRequest = new httpRequest(siad.host, siad.agent, siad.password);
-
-    // API: /consensus
-    this.status = function () {
-        return this.httpRequest.normalGetSync('/wallet/init');
-    };
-
-    // API: /daemon/stop TODO
-    this.validateTransactionset = function () {
-        return this.httprequest.post('/consensus/validate/transactionset', {});
-    };
-}*/
 

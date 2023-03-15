@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 console.log();
 
+// Success response format
 exports._SuccessResponse = function succes(res, data=null, message=null){
     console.log(message)
     if(message != null){
@@ -20,6 +21,7 @@ exports._SuccessResponse = function succes(res, data=null, message=null){
     }
 }
 
+// Error response format
 exports._ErrorResponse = function error(res, data=null, message=null){
     if(message != null){
         res.status(400);

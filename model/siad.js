@@ -2,7 +2,8 @@
 var Wallet = require('./wallet');
 var NetworkPower = require('./networkPower');
 
-class Siad{
+//Define structure of Siad object
+module.exports = class Siad{
     constructor(config){
         this.host = config.host,
         this.agent = config.agent,
@@ -23,4 +24,3 @@ class Siad{
         return this.consensus.status().synced;
     };
 }
-module.exports = Siad;

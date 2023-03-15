@@ -3,7 +3,7 @@ var router = express.Router();
 var SiadController = require('../controller/siad')
 
 
-/* GET home page. */
+/* GET network mining profitability data*/
 router.get('/miningprofitability', function(req, res, next) {
     SiadController.networkMiningProfitability(res)
 });

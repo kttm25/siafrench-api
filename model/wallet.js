@@ -1,6 +1,7 @@
 var httpRequest = require('../utils/httpRequest');
 
-class Wallet{
+//Define structure of Wallet Object
+module.exports = class Wallet{
     constructor(siad){
         this.httpRequest = new httpRequest(siad);
     }
@@ -14,19 +15,3 @@ class Wallet{
         return this.httprequest.post('/consensus/validate/transactionset', {});
     };
 }
-/*function Wallet(siad) {
-    var self = this;
-    this.httpRequest = new httpRequest(siad.host, siad.agent, siad.password);
-
-    // API: /consensus
-    this.status = function () {
-        return this.httpRequest.normalGetSync('/wallet/init');
-    };
-
-    // API: /daemon/stop TODO
-    this.validateTransactionset = function () {
-        return this.httprequest.post('/consensus/validate/transactionset', {});
-    };
-}*/
-
-module.exports = Wallet;
