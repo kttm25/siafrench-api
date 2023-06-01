@@ -195,17 +195,17 @@ curl --location 'localhost:4000/networkpower/usageratio'
 - [x] Add back to top links
 - [ ] Add Changelog
 - [ ] Add new features
--   [x] Add Network Storage State route
--   [x] Add Network Actives Hosts route
--   [x] Add Network Usage Ratio route
--   [x] Add Network Mining Profitability
--   [ ] Add Network Profits paid by renters route
--   [ ] Add Network Total Supply route
--   [ ] Add Network Siafund Profitability route
--   [ ] Add Network Siafund Distribution route
--   [ ] Add Network Storage Pricing route
--   [ ] Add Network Storage contract route
--   [ ] Add Network Curent distribution route
+    - [x] Add Network Storage State route
+    - [x] Add Network Actives Hosts route
+    - [x] Add Network Usage Ratio route
+    - [x] Add Network Mining Profitability
+    - [ ] Add Network Profits paid by renters route
+    - [ ] Add Network Total Supply route
+    - [ ] Add Network Siafund Profitability route
+    - [ ] Add Network Siafund Distribution route
+    - [ ] Add Network Storage Pricing route
+    - [ ] Add Network Storage contract route
+    - [ ] Add Network Curent distribution route
 
 
 
