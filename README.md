@@ -6,14 +6,14 @@
   <p align="center">
     An API build to help you to interact with Sia network without deploy node
     <br />
-    <a href="https://github.com/kttm25/siafrench/blob/master/README.md"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/kttm25/siafrench-api/blob/master/README.md"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/kttm25/siafrench/blob/master/README.md">View Demo</a>
+    <a href="https://github.com/kttm25/siafrench-api/blob/master/README.md">View Demo</a>
     ·
-    <a href="https://github.com/kttm25/siafrench/issues">Report Bug</a>
+    <a href="https://github.com/kttm25/siafrench-api/issues">Report Bug</a>
     ·
-    <a href="https://github.com/kttm25/siafrench/issues">Request Feature</a>
+    <a href="https://github.com/kttm25/siafrench-api/issues">Request Feature</a>
   </p>
 </div>
 
@@ -86,7 +86,7 @@ You will also see any lint errors in the console.
 #### `npm test`
 
 Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://github.com/kttm25/siafrench/README.MD) for more information.
+See the section about [running tests](https://github.com/kttm25/siafrench-api/README.MD) for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -209,7 +209,7 @@ curl --location 'localhost:4000/networkpower/usageratio'
 
 
 
-See the [open issues](https://github.com/kttm25/siafrench/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/kttm25/siafrench-api/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
