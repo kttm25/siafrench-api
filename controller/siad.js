@@ -182,8 +182,8 @@ exports.networkProfitPaidByRenters = async function networkProfitPaidByRenters (
 //Get network total supply
 exports.networkTotalSupply = async function networkTotalSupply (res){
     await axios.get("https://siastats.info:3500/navigator-api/hash/000000000000000000000000000000000000000000000000000000000000000089eb0d6a8a69").then(result =>{
-        if(result.data != null){
-            var TotalBurnSiaCoin = result[1].balanceSc;
+        if(result != null){
+            var TotalBurnSiaCoin = result.data[1].balanceSc;
             concensus(res).then(result1 =>{
                 var count = 0;
                 var TotalSiacoinIncirculation = 0;
@@ -191,12 +191,14 @@ exports.networkTotalSupply = async function networkTotalSupply (res){
                 for(var i=0; i<result1.height; i++){
                     concensusBlock(res, result1.height).then(result2 =>{
                         //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                        TotalSiacoinIncirculation += result2.minerpayouts[0].value;
+                        TotalSiacoinIncirculation += ParseInt(result2.minerpayouts[0].value);
+                        console.log(TotalSiacoinIncirculation);
                         count++;
                     }).catch(err =>{
                         return err;
                     })
                 }
+                console.log(count)
                 if(count == result1.height){
                     Response._SuccessResponse(res, {
                         totalsiacoinincirculation: TotalSiacoinIncirculation,
