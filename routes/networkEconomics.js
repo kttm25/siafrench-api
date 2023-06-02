@@ -8,4 +8,8 @@ router.get('/miningprofitability', function(req, res, next) {
     SiadController.networkMiningProfitability(res)
 });
 
+router.get('/totalsupply', function(req, res, next) {
+    SiadController.networkTotalSupply(res)
+});
+
 module.exports = router;
