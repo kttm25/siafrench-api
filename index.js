@@ -10,6 +10,7 @@ require('dotenv').config()
 
 var networkPower = require('./routes/networkPower');
 var networkEconomics = require('./routes/networkEconomics');
+var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
 
 const { Console } = require('console');
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/siad', siadRouter);
 app.use('/networkpower', networkPower);
 app.use('/networkeconomics', networkEconomics);
+app.use('/networkstoragemarketplace', networkStorageMarketplace);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

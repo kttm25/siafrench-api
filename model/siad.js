@@ -1,6 +1,6 @@
 
 var Wallet = require('./wallet');
-var NetworkPower = require('./networkPower');
+var SiaNetworkData = require('./siadnetworkdata');
 
 //Define structure of Siad object
 module.exports = class Siad{
@@ -9,7 +9,7 @@ module.exports = class Siad{
         this.agent = config.agent,
         this.password = config.password
         this.wallet = new Wallet(this)
-        this.networkPower = new NetworkPower(this)
+        this.siaNetworkData = new SiaNetworkData(this)
     }
 
 

@@ -1,7 +1,7 @@
 var httpRequest = require('../utils/httpRequest');
 
 //Define structure of networkPower object
-module.exports = class networkPower{
+module.exports = class SiaNetworkData{
     constructor(siad){
         this.httpRequest = new httpRequest(siad);
     }

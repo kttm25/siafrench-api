@@ -13,7 +13,7 @@ const siad = new Siad({
 
 //Get result of siad's consensus request
 async function concensus(res){
-    return siad.networkPower.consensus().then(result =>{
+    return siad.siaNetworkData.consensus().then(result =>{
         return result;
     }).catch(err =>{
         Response._ErrorResponse(res, err.toString(), messages.error)
@@ -22,7 +22,16 @@ async function concensus(res){
 
 //Get result of siad's consensus block request
 async function concensusBlock(res, block){
-    return await siad.networkPower.consensusblock(block).then(result =>{
+    return await siad.siaNetworkData.consensusblock(block).then(result =>{
+        return result;
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get result of siad's hostdb active host
+async function activehosts(res){
+    return await siad.siaNetworkData.activehosts().then(result =>{
         return result;
     }).catch(err =>{
         Response._ErrorResponse(res, err.toString(), messages.error)
@@ -31,7 +40,7 @@ async function concensusBlock(res, block){
 
 //Get network storage state
 exports.networkStorageState = async function networkStorageState (res){
-    siad.networkPower.activehosts().then(result =>{
+    siad.siaNetworkData.activehosts().then(result =>{
         if(result.hosts != null){
             var totalstorage = 0;
             var usedStorage = 0
@@ -60,7 +69,7 @@ exports.networkStorageState = async function networkStorageState (res){
 
 //Get network actives hosts
 exports.networkActivesHosts = async function networkActivesHosts(res){
-    siad.networkPower.activehosts().then(result =>{
+    siad.siaNetworkData.activehosts().then(result =>{
         if(result.hosts != null){
             var numberactivestorage = result.hosts.length;
             var numberactivestorageACC = 0;
@@ -93,7 +102,7 @@ exports.networkActivesHosts = async function networkActivesHosts(res){
 
 //Get network Usage
 exports.networkUsageRatio = async function networkUsageRatio (res){
-    siad.networkPower.activehosts().then(result =>{
+    siad.siaNetworkData.activehosts().then(result =>{
         if(result.hosts != null){
             var numberactivehosts = result.hosts.length;
             var totalstorage = 0;
@@ -181,6 +190,33 @@ exports.networkTotalSupply = async function networkTotalSupply (res){
             })
         }else{
             Response._SuccessResponse(res, null, messages.error)
+        }
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get Network Storage pricing
+exports.networkStoragePricing = async function networkStoragePricing (res){
+    siad.siaNetworkData.activehosts().then(result =>{
+        if(result.hosts != null){
+            var numberactivehosts = result.hosts.length;
+            var SumstoragepriceperTbpermonth = 0;
+            var SumuploadpriceperTB = 0
+            var SumdowloadpriceperTB = 0
+            for(var i=0; i < result.hosts.length; i++){
+                SumstoragepriceperTbpermonth += result.hosts[i].storageprice
+                SumuploadpriceperTB += result.hosts[i].uploadbandwidthprice
+                SumdowloadpriceperTB += result.hosts[i].downloadbandwidthprice
+            }
+            Response._SuccessResponse(res, {
+                storagepriceperTbpermonth: SumstoragepriceperTbpermonth/numberactivehosts,
+                uploadpriceperTB: SumuploadpriceperTB/numberactivehosts,
+                dowloadpriceperTB: SumdowloadpriceperTB/numberactivehosts,
+                timestamp:new Date().getTime()
+            })
+        }else{
+            Response._SuccessResponse(res, null, messages.nohostactive)
         }
     }).catch(err =>{
         Response._ErrorResponse(res, err.toString(), messages.error)
