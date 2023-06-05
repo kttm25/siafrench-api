@@ -222,3 +222,30 @@ exports.networkStoragePricing = async function networkStoragePricing (res){
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
+
+//Get Network Profits Paid By Renters
+exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters (res){
+    siad.siaNetworkData.activehosts().then(result =>{
+        if(result.hosts != null){
+            var numberactivehosts = result.hosts.length;
+            var SumstoragepriceperTbpermonth = 0;
+            var SumuploadpriceperTB = 0
+            var SumdowloadpriceperTB = 0
+            for(var i=0; i < result.hosts.length; i++){
+                SumstoragepriceperTbpermonth += result.hosts[i].storageprice
+                SumuploadpriceperTB += result.hosts[i].uploadbandwidthprice
+                SumdowloadpriceperTB += result.hosts[i].downloadbandwidthprice
+            }
+            Response._SuccessResponse(res, {
+                storagepriceperTbpermonth: SumstoragepriceperTbpermonth/numberactivehosts,
+                uploadpriceperTB: SumuploadpriceperTB/numberactivehosts,
+                dowloadpriceperTB: SumdowloadpriceperTB/numberactivehosts,
+                timestamp:new Date().getTime()
+            })
+        }else{
+            Response._SuccessResponse(res, null, messages.nohostactive)
+        }
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}

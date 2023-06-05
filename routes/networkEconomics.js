@@ -12,4 +12,8 @@ router.get('/totalsupply', function(req, res, next) {
     SiadController.networkTotalSupply(res)
 });
 
+router.get('/profitspaidbyrenters', function(req, res, next) {
+    SiadController.networkTotalSupply(res)
+});
+
 module.exports = router;
