@@ -221,3 +221,20 @@ exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters
         }
     });
 }
+
+//Get Network SiadFund Profitability
+exports.networkSiaFundProfitability = async function networkSiaFundProfitability (res){
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
+                Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
+                Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}
