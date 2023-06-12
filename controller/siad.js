@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 const Response = require("../utils/response")
 const messages = require("../utils/messages")
@@ -160,42 +161,6 @@ exports.networkMiningProfitability = async function networkMiningProfitability (
     })
 }
 
-//Get network total supply
-exports.networkTotalSupply = async function networkTotalSupply (res){
-    await axios.get("https://siastats.info:3500/navigator-api/hash/000000000000000000000000000000000000000000000000000000000000000089eb0d6a8a69").then(result =>{
-        if(result != null){
-            var TotalBurnSiaCoin = result.data[1].balanceSc;
-            concensus(res).then(result1 =>{
-                var count = 0;
-                var TotalSiacoinIncirculation = 0;
-                for(var i=0; i<result1.height; i++){
-                    concensusBlock(res, result1.height).then(result2 =>{
-                        TotalSiacoinIncirculation += parseInt(result2.minerpayouts[0].value);
-                        //console.log(TotalSiacoinIncirculation);
-                        count++;
-                        if(count == result1.height){
-                            Response._SuccessResponse(res, {
-                                totalsiacoinincirculation: TotalSiacoinIncirculation,
-                                totalburntsiacoin: TotalBurnSiaCoin,
-                                currentblockchainheight: result1.height, 
-                                timestamp:new Date().getTime(),
-                            })
-                        }
-                    }).catch(err =>{
-                        Response._ErrorResponse(res, err.toString(), messages.error)
-                    })
-                }
-            }).catch(err =>{
-                Response._ErrorResponse(res, err.toString(), messages.error)
-            })
-        }else{
-            Response._SuccessResponse(res, null, messages.error)
-        }
-    }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
-    })
-}
-
 //Get Network Storage pricing
 exports.networkStoragePricing = async function networkStoragePricing (res){
     siad.siaNetworkData.activehosts().then(result =>{
@@ -223,29 +188,36 @@ exports.networkStoragePricing = async function networkStoragePricing (res){
     })
 }
 
+
+//Get network total supply
+exports.networkTotalSupply = async function networkTotalSupply (res){
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                totalsiacoinincirculation: JSON.parse(data).networkTotalSupply.totalsiacoinincirculation,
+                totalburntsiacoin: JSON.parse(data).networkTotalSupply.totalburntsiacoin,
+                currentblockchainheight: JSON.parse(data).networkTotalSupply.currentblockchainheight, 
+                timestamp: JSON.parse(data).networkTotalSupply.timestamp,
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}
+
 //Get Network Profits Paid By Renters
 exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters (res){
-    siad.siaNetworkData.activehosts().then(result =>{
-        if(result.hosts != null){
-            var numberactivehosts = result.hosts.length;
-            var SumstoragepriceperTbpermonth = 0;
-            var SumuploadpriceperTB = 0
-            var SumdowloadpriceperTB = 0
-            for(var i=0; i < result.hosts.length; i++){
-                SumstoragepriceperTbpermonth += result.hosts[i].storageprice
-                SumuploadpriceperTB += result.hosts[i].uploadbandwidthprice
-                SumdowloadpriceperTB += result.hosts[i].downloadbandwidthprice
-            }
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
             Response._SuccessResponse(res, {
-                storagepriceperTbpermonth: SumstoragepriceperTbpermonth/numberactivehosts,
-                uploadpriceperTB: SumuploadpriceperTB/numberactivehosts,
-                dowloadpriceperTB: SumdowloadpriceperTB/numberactivehosts,
-                timestamp:new Date().getTime()
+                Network_profits_24hrs: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_24hrs,
+                Network_profits_7days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_7days,
+                Network_profits_30days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
             })
-        }else{
-            Response._SuccessResponse(res, null, messages.nohostactive)
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
         }
-    }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
-    })
+    });
 }

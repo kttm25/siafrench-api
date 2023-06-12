@@ -6,8 +6,13 @@ var logger = require('morgan');
 var debug = require('debug')('siadmap:server');
 var http = require('http');
 
-require('dotenv').config()
+//Import env variable
+require('dotenv').config();
 
+//lib for background task
+var backgroundtask = require('./lib/backgroundtask');
+
+//Routes
 var networkPower = require('./routes/networkPower');
 var networkEconomics = require('./routes/networkEconomics');
 var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
@@ -48,30 +53,24 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-/**
- * Get port from environment and store in Express.
- */
+//launch background task
+backgroundtask.doInBackground();
 
+
+//Get port from environment and store in Express.
 var port = normalizePort(process.env.APP_PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
+//Create HTTP server.
 var server = http.createServer(app);
-/**
- * Listen on provided port, on all network interfaces.
- */
 
+// Listen on provided port, on all network interfaces.
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Normalize a port into a number, string, or false.
- */
 
+//Normalize a port into a number, string, or false.
 function normalizePort(val) {
   var port = parseInt(val, 10);
 
@@ -88,10 +87,7 @@ function normalizePort(val) {
   return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-
+//Event listener for HTTP server "error" event.
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -116,10 +112,7 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
+//Event listener for HTTP server "listening" event.
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'

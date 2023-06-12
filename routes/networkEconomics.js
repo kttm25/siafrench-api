@@ -13,7 +13,7 @@ router.get('/totalsupply', function(req, res, next) {
 });
 
 router.get('/profitspaidbyrenters', function(req, res, next) {
-    SiadController.networkTotalSupply(res)
+    SiadController.networkProfitsPaidByRenters(res)
 });
 
 module.exports = router;
