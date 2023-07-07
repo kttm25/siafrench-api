@@ -238,3 +238,56 @@ exports.networkSiaFundProfitability = async function networkSiaFundProfitability
         }
     });
 }
+
+//Get Network Mining Total Hashrate
+exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(res){
+    concensus(res).then(result =>{
+        //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})    
+        var difficulty = result.difficulty;
+        var timestamp = [];
+        var count = 0;
+        var blockanalysecount = 5;
+        for(var i = result.height; i > result.height - blockanalysecount; i--){
+            concensusBlock(res, i.toString()).then(result1 =>{
+                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
+                timestamp.push(result1.timestamp);
+                /*Response._SuccessResponse(res, {
+                    currentprofitabilitybymhs: CurrentProfitabilitybyMhs, 
+                    currentblockchainheight: result1.height, 
+                    timestamp:new Date().getTime(),
+                    latestminingblockrewards : result2.minerpayouts,
+                })*/
+                if(count == blockanalysecount){
+                    var timeaverage = []
+                    timestamp.sort();
+                    console.log(timestamp)
+                    for(var j=0; j < timestamp.length - 1; j++){
+                        timeaverage.push(timestamp[j] - timestamp[j+1])
+                    }
+                    console.log(timeaverage)
+                }
+            }).catch(err =>{
+                Response._ErrorResponse(res, err.toString(), messages.error)
+            })
+        }
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get Network Mining Total Hashrate
+exports.networkMiningDifficulty = async function networkMiningDifficulty(res){
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
+                Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
+                Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}

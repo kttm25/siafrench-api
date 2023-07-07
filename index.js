@@ -16,6 +16,7 @@ var backgroundtask = require('./lib/backgroundtask');
 var networkPower = require('./routes/networkPower');
 var networkEconomics = require('./routes/networkEconomics');
 var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
+var networkMining = require('./routes/networkMining');
 
 const { Console } = require('console');
 
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/networkpower', networkPower);
 app.use('/networkeconomics', networkEconomics);
 app.use('/networkstoragemarketplace', networkStorageMarketplace);
+app.use('/networkmining', networkMining);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -54,7 +56,7 @@ app.use(function(err, req, res, next) {
 });
 
 //launch background task
-backgroundtask.doInBackground();
+//backgroundtask.doInBackground();
 
 
 //Get port from environment and store in Express.
