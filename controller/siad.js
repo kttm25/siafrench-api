@@ -249,22 +249,31 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
         var blockanalysecount = 5;
         for(var i = result.height; i > result.height - blockanalysecount; i--){
             concensusBlock(res, i.toString()).then(result1 =>{
-                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
                 timestamp.push(result1.timestamp);
-                /*Response._SuccessResponse(res, {
-                    currentprofitabilitybymhs: CurrentProfitabilitybyMhs, 
-                    currentblockchainheight: result1.height, 
-                    timestamp:new Date().getTime(),
-                    latestminingblockrewards : result2.minerpayouts,
-                })*/
+                count++;
                 if(count == blockanalysecount){
-                    var timeaverage = []
+                    var timeinterval = []
                     timestamp.sort();
-                    console.log(timestamp)
+                    timeaverage = 0;
                     for(var j=0; j < timestamp.length - 1; j++){
-                        timeaverage.push(timestamp[j] - timestamp[j+1])
+                        if(timestamp[j] - timestamp[j+1] < 0){
+                            timeinterval.push((timestamp[j] - timestamp[j+1]) * -1)
+                            timeaverage += (timestamp[j] - timestamp[j+1]) * -1
+                        }
+                        else{
+                            timeinterval.push(timestamp[j] - timestamp[j+1])
+                            timeaverage += timestamp[j] - timestamp[j+1]
+                        }
                     }
-                    console.log(timeaverage)
+                    timeaverage = timeaverage/blockanalysecount;
+                    Response._SuccessResponse(res, {
+                        currentnetworkmininghashrate: (difficulty * 2**32)/timeaverage, 
+                        currentnetworkdifficulty: difficulty, 
+                        currentaverageblocktime: timeaverage, 
+                        currentheight: result.height, 
+                        timestamp:new Date().getTime(),
+                    })
+                    //console.log(timeaverage)
                 }
             }).catch(err =>{
                 Response._ErrorResponse(res, err.toString(), messages.error)
