@@ -286,17 +286,19 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
 
 //Get Network Mining Total Hashrate
 exports.networkMiningDifficulty = async function networkMiningDifficulty(res){
-    
-    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
-        if (!err) {
+    concensus(res).then(result =>{
+        //console.log(result)
+        concensusBlock(res, result.height).then(result1 =>{
             Response._SuccessResponse(res, {
-                Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
-                Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
-                Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
-                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+                currentminingdifficulty: result1.difficulty, 
+                currentminingblockreward: result1.minerpayouts[0].value, 
+                currentheight: result.height, 
+                timestamp:new Date().getTime(),
             })
-        } else {
+        }).catch(err =>{
             Response._ErrorResponse(res, err.toString(), messages.error)
-        }
-    });
+        })
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
 }
