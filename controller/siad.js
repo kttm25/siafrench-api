@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 const Response = require("../utils/response")
 const messages = require("../utils/messages")
@@ -160,42 +161,6 @@ exports.networkMiningProfitability = async function networkMiningProfitability (
     })
 }
 
-//Get network total supply
-exports.networkTotalSupply = async function networkTotalSupply (res){
-    await axios.get("https://siastats.info:3500/navigator-api/hash/000000000000000000000000000000000000000000000000000000000000000089eb0d6a8a69").then(result =>{
-        if(result != null){
-            var TotalBurnSiaCoin = result.data[1].balanceSc;
-            concensus(res).then(result1 =>{
-                var count = 0;
-                var TotalSiacoinIncirculation = 0;
-                for(var i=0; i<result1.height; i++){
-                    concensusBlock(res, result1.height).then(result2 =>{
-                        TotalSiacoinIncirculation += parseInt(result2.minerpayouts[0].value);
-                        //console.log(TotalSiacoinIncirculation);
-                        count++;
-                        if(count == result1.height){
-                            Response._SuccessResponse(res, {
-                                totalsiacoinincirculation: TotalSiacoinIncirculation,
-                                totalburntsiacoin: TotalBurnSiaCoin,
-                                currentblockchainheight: result1.height, 
-                                timestamp:new Date().getTime(),
-                            })
-                        }
-                    }).catch(err =>{
-                        Response._ErrorResponse(res, err.toString(), messages.error)
-                    })
-                }
-            }).catch(err =>{
-                Response._ErrorResponse(res, err.toString(), messages.error)
-            })
-        }else{
-            Response._SuccessResponse(res, null, messages.error)
-        }
-    }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
-    })
-}
-
 //Get Network Storage pricing
 exports.networkStoragePricing = async function networkStoragePricing (res){
     siad.siaNetworkData.activehosts().then(result =>{
@@ -221,4 +186,117 @@ exports.networkStoragePricing = async function networkStoragePricing (res){
     }).catch(err =>{
         Response._ErrorResponse(res, err.toString(), messages.error)
     })
+}
+
+
+//Get network total supply
+exports.networkTotalSupply = async function networkTotalSupply (res){
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                totalsiacoinincirculation: JSON.parse(data).networkTotalSupply.totalsiacoinincirculation,
+                totalburntsiacoin: JSON.parse(data).networkTotalSupply.totalburntsiacoin,
+                currentblockchainheight: JSON.parse(data).networkTotalSupply.currentblockchainheight, 
+                timestamp: JSON.parse(data).networkTotalSupply.timestamp,
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}
+
+//Get Network Profits Paid By Renters
+exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters (res){
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                Network_profits_24hrs: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_24hrs,
+                Network_profits_7days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_7days,
+                Network_profits_30days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}
+
+//Get Network SiadFund Profitability
+exports.networkSiaFundProfitability = async function networkSiaFundProfitability (res){
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
+                Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
+                Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
+}
+
+//Get Network Mining Total Hashrate
+exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(res){
+    concensus(res).then(result =>{
+        //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})    
+        var difficulty = result.difficulty;
+        var timestamp = [];
+        var count = 0;
+        var blockanalysecount = 5;
+        for(var i = result.height; i > result.height - blockanalysecount; i--){
+            concensusBlock(res, i.toString()).then(result1 =>{
+                timestamp.push(result1.timestamp);
+                count++;
+                if(count == blockanalysecount){
+                    var timeinterval = []
+                    timestamp.sort();
+                    timeaverage = 0;
+                    for(var j=0; j < timestamp.length - 1; j++){
+                        if(timestamp[j] - timestamp[j+1] < 0){
+                            timeinterval.push((timestamp[j] - timestamp[j+1]) * -1)
+                            timeaverage += (timestamp[j] - timestamp[j+1]) * -1
+                        }
+                        else{
+                            timeinterval.push(timestamp[j] - timestamp[j+1])
+                            timeaverage += timestamp[j] - timestamp[j+1]
+                        }
+                    }
+                    timeaverage = timeaverage/blockanalysecount;
+                    Response._SuccessResponse(res, {
+                        currentnetworkmininghashrate: (difficulty * 2**32)/timeaverage, 
+                        currentnetworkdifficulty: difficulty, 
+                        currentaverageblocktime: timeaverage, 
+                        currentheight: result.height, 
+                        timestamp:new Date().getTime(),
+                    })
+                    //console.log(timeaverage)
+                }
+            }).catch(err =>{
+                Response._ErrorResponse(res, err.toString(), messages.error)
+            })
+        }
+    }).catch(err =>{
+        Response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get Network Mining Total Hashrate
+exports.networkMiningDifficulty = async function networkMiningDifficulty(res){
+    
+    fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
+        if (!err) {
+            Response._SuccessResponse(res, {
+                Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
+                Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
+                Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
+                timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
+            })
+        } else {
+            Response._ErrorResponse(res, err.toString(), messages.error)
+        }
+    });
 }
