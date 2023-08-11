@@ -2,5 +2,6 @@
 module.exports = {
     "nohostactive" : 'No Host Active',
     "succes" : 'succes.',
-    "error" : 'An error occurred '
+    "error" : 'An error occurred',
+    "syntaxe_error" : 'Incorrect Request'
 }

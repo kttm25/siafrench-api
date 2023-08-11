@@ -6,6 +6,10 @@ var logger = require('morgan');
 var debug = require('debug')('siadmap:server');
 var http = require('http');
 
+const cors = require('cors');
+const message = require('./utils/messages')
+
+
 //Import env variable
 require('dotenv').config();
 
@@ -39,6 +43,14 @@ app.use('/networkeconomics', networkEconomics);
 app.use('/networkstoragemarketplace', networkStorageMarketplace);
 app.use('/networkmining', networkMining);
 
+//Add cors headers
+app.use(cors({
+  //origin: ['https://www.section.io', 'https://www.google.com/']
+  origin: '*',
+  methods: ['GET']
+}));
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -52,7 +64,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(message.syntaxe_error);
 });
 
 //launch background task
