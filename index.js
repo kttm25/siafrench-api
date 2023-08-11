@@ -21,14 +21,11 @@ var networkPower = require('./routes/networkPower');
 var networkEconomics = require('./routes/networkEconomics');
 var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
 var networkMining = require('./routes/networkMining');
+var user = require('./routes/user');
 
 const { Console } = require('console');
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -42,6 +39,9 @@ app.use('/networkpower', networkPower);
 app.use('/networkeconomics', networkEconomics);
 app.use('/networkstoragemarketplace', networkStorageMarketplace);
 app.use('/networkmining', networkMining);
+
+if(process.env.DATABASE_ENABLE)
+  app.use('/user', user);
 
 //Add cors headers
 app.use(cors({

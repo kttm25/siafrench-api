@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 
-const Response = require("../utils/response")
+const response = require("../utils/response")
 const messages = require("../utils/messages")
 const Siad = require('../model/siad');
 const cookieParser = require('cookie-parser');
@@ -17,7 +17,7 @@ async function concensus(res){
     return siad.siaNetworkData.consensus().then(result =>{
         return result;
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -26,7 +26,7 @@ async function concensusBlock(res, block){
     return await siad.siaNetworkData.consensusblock(block).then(result =>{
         return result;
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -35,7 +35,7 @@ async function activehosts(res){
     return await siad.siaNetworkData.activehosts().then(result =>{
         return result;
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -51,20 +51,20 @@ exports.networkStorageState = async function networkStorageState (res){
             }
             concensus(res).then(result =>{
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                Response._SuccessResponse(res, {
+                response._SuccessResponse(res, {
                     totalnetworkstorage: totalstorage, 
                     usednetworkstorage: usedStorage, 
                     currentblockchainheight: result.height, 
                     timestamp:new Date().getTime()
                 })
             }).catch(err =>{
-                Response._ErrorResponse(res, err.toString(), messages.error)
+                response._ErrorResponse(res, err.toString(), messages.error)
             })
         }else{
-            Response._SuccessResponse(res, null, messages.nohostactive)
+            response._SuccessResponse(res, null, messages.nohostactive)
         }
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -81,7 +81,7 @@ exports.networkActivesHosts = async function networkActivesHosts(res){
             }
             concensus(res).then(result =>{
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                Response._SuccessResponse(res, {
+                response._SuccessResponse(res, {
                     numberactivestorage: numberactivestorage,
                     numberactivestorageACC: numberactivestorageACC,
                     currentblockchainheight: result.height, 
@@ -89,15 +89,15 @@ exports.networkActivesHosts = async function networkActivesHosts(res){
                 })
             }).catch(err =>{
                 console.log(err)
-                Response._ErrorResponse(res, err.toString(), messages.error)
+                response._ErrorResponse(res, err.toString(), messages.error)
             })
             
         }else{
-            Response._SuccessResponse(res, null, messages.nohostactive)
+            response._SuccessResponse(res, null, messages.nohostactive)
         }
     }).catch(err =>{
         console.log(err)
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -114,21 +114,21 @@ exports.networkUsageRatio = async function networkUsageRatio (res){
             }
             concensus(res).then(result =>{
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                Response._SuccessResponse(res, {
+                response._SuccessResponse(res, {
                     storageusagepercentage: Number((usedStorage/totalstorage).toFixed(2)),
                     averagestoragesizeperhost: totalstorage/numberactivehosts,
                     currentblockchainheight: result.height, 
                     timestamp:new Date().getTime()
                 })
             }).catch(err =>{
-                Response._ErrorResponse(res, err.toString())
+                response._ErrorResponse(res, err.toString())
             })
             
         }else{
-            Response._SuccessResponse(res, null, messages.nohostactive)
+            response._SuccessResponse(res, null, messages.nohostactive)
         }
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -141,23 +141,23 @@ exports.networkMiningProfitability = async function networkMiningProfitability (
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
                 concensusBlock(res, result1.height).then(result2 =>{
                     //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                    Response._SuccessResponse(res, {
+                    response._SuccessResponse(res, {
                         currentprofitabilitybymhs: CurrentProfitabilitybyMhs, 
                         currentblockchainheight: result1.height, 
                         timestamp:new Date().getTime(),
                         latestminingblockrewards : result2.minerpayouts,
                     })
                 }).catch(err =>{
-                    Response._ErrorResponse(res, err.toString(), messages.error)
+                    response._ErrorResponse(res, err.toString(), messages.error)
                 })
             }).catch(err =>{
-                Response._ErrorResponse(res, err.toString(), messages.error)
+                response._ErrorResponse(res, err.toString(), messages.error)
             })
         }else{
-            Response._SuccessResponse(res, null, messages.error)
+            response._SuccessResponse(res, null, messages.error)
         }
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -174,17 +174,17 @@ exports.networkStoragePricing = async function networkStoragePricing (res){
                 SumuploadpriceperTB += result.hosts[i].uploadbandwidthprice
                 SumdowloadpriceperTB += result.hosts[i].downloadbandwidthprice
             }
-            Response._SuccessResponse(res, {
+            response._SuccessResponse(res, {
                 storagepriceperTbpermonth: SumstoragepriceperTbpermonth/numberactivehosts,
                 uploadpriceperTB: SumuploadpriceperTB/numberactivehosts,
                 dowloadpriceperTB: SumdowloadpriceperTB/numberactivehosts,
                 timestamp:new Date().getTime()
             })
         }else{
-            Response._SuccessResponse(res, null, messages.nohostactive)
+            response._SuccessResponse(res, null, messages.nohostactive)
         }
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -193,14 +193,14 @@ exports.networkStoragePricing = async function networkStoragePricing (res){
 exports.networkTotalSupply = async function networkTotalSupply (res){
     fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
-            Response._SuccessResponse(res, {
+            response._SuccessResponse(res, {
                 totalsiacoinincirculation: JSON.parse(data).networkTotalSupply.totalsiacoinincirculation,
                 totalburntsiacoin: JSON.parse(data).networkTotalSupply.totalburntsiacoin,
                 currentblockchainheight: JSON.parse(data).networkTotalSupply.currentblockchainheight, 
                 timestamp: JSON.parse(data).networkTotalSupply.timestamp,
             })
         } else {
-            Response._ErrorResponse(res, err.toString(), messages.error)
+            response._ErrorResponse(res, err.toString(), messages.error)
         }
     });
 }
@@ -210,14 +210,14 @@ exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters
     
     fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
-            Response._SuccessResponse(res, {
+            response._SuccessResponse(res, {
                 Network_profits_24hrs: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_24hrs,
                 Network_profits_7days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_7days,
                 Network_profits_30days: JSON.parse(data).networkProfitsPaidByRenters.Network_profits_30days,
                 timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
             })
         } else {
-            Response._ErrorResponse(res, err.toString(), messages.error)
+            response._ErrorResponse(res, err.toString(), messages.error)
         }
     });
 }
@@ -227,14 +227,14 @@ exports.networkSiaFundProfitability = async function networkSiaFundProfitability
     
     fs.readFile(process.env.FILE_DATA_LOCATION, {encoding: 'utf-8'}, function(err,data){
         if (!err) {
-            Response._SuccessResponse(res, {
+            response._SuccessResponse(res, {
                 Profitability_24hrs: JSON.parse(data).networkSiafundProfitability.Profitability_24hrs,
                 Profitability_7days: JSON.parse(data).networkSiafundProfitability.Profitability_7days,
                 Profitability_30days: JSON.parse(data).networkSiafundProfitability.Profitability_30days,
                 timestamp: JSON.parse(data).networkProfitsPaidByRenters.timestamp
             })
         } else {
-            Response._ErrorResponse(res, err.toString(), messages.error)
+            response._ErrorResponse(res, err.toString(), messages.error)
         }
     });
 }
@@ -266,7 +266,7 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
                         }
                     }
                     timeaverage = timeaverage/blockanalysecount;
-                    Response._SuccessResponse(res, {
+                    response._SuccessResponse(res, {
                         currentnetworkmininghashrate: (difficulty * 2**32)/timeaverage, 
                         currentnetworkdifficulty: difficulty, 
                         currentaverageblocktime: timeaverage, 
@@ -276,11 +276,11 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
                     //console.log(timeaverage)
                 }
             }).catch(err =>{
-                Response._ErrorResponse(res, err.toString(), messages.error)
+                response._ErrorResponse(res, err.toString(), messages.error)
             })
         }
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
@@ -289,16 +289,16 @@ exports.networkMiningDifficulty = async function networkMiningDifficulty(res){
     concensus(res).then(result =>{
         //console.log(result)
         concensusBlock(res, result.height).then(result1 =>{
-            Response._SuccessResponse(res, {
+            response._SuccessResponse(res, {
                 currentminingdifficulty: result1.difficulty, 
                 currentminingblockreward: result1.minerpayouts[0].value, 
                 currentheight: result.height, 
                 timestamp:new Date().getTime(),
             })
         }).catch(err =>{
-            Response._ErrorResponse(res, err.toString(), messages.error)
+            response._ErrorResponse(res, err.toString(), messages.error)
         })
     }).catch(err =>{
-        Response._ErrorResponse(res, err.toString(), messages.error)
+        response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
