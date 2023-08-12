@@ -68,7 +68,7 @@ app.use(function(err, req, res, next) {
 });
 
 //launch background task
-//backgroundtask.doInBackground();
+backgroundtask.doInBackground();
 
 
 //Get port from environment and store in Express.
