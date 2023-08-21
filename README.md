@@ -145,7 +145,7 @@ Retrieve Active hosts on the network
 
 ```
 //Example
-curl --location 'localhost:4000/networkpower/activeshosts'
+curl --location '34.214.46.107:4000/networkpower/activeshosts'
 ```
 
 **Response**
