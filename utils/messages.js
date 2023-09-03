@@ -7,5 +7,6 @@ module.exports = {
     "incorrect_parameter" : 'Incorrect parameter',
     "incorrect_credentials" : 'Incorrect credentials',
     "invalid_api_key" : 'Not allowed.',
-    "max_api_call" : 'Max API calls exceeded.'
+    "max_api_call" : 'Max API calls exceeded.',
+    "Account_already_exist" : "Account already exist"
 }

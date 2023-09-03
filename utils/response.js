@@ -61,11 +61,31 @@ exports._ErrorNotAllowedResponse = function error(res, data=null, message=null){
         })
     }
 }
-
-// Error Max API Callresponse format
-exports._ErrorMaxAPICallResponse = function error(res, data=null, message=null){
+// Error API Key invalid response format
+exports._ErrorNotAllowedResponse = function error(res, data=null, message=null){
     if(message != null){
         res.status(403);
+        res.send({
+            "request_id": crypto.randomUUID(), //"4e14a4aa-2368-4029-a660-5a883c0c29f1#606",
+            "code": 0,
+            "message": message,
+            "data": data  
+        })
+    }else{
+        res.status(403);
+        res.send({
+            "request_id": crypto.randomUUID(), //"4e14a4aa-2368-4029-a660-5a883c0c29f1#606",
+            "code": 0,
+            "message": "error.",
+            "data": data  
+        })
+    }
+}
+
+// Error Max API Callresponse format
+exports._ErrorConflict = function error(res, data=null, message=null){
+    if(message != null){
+        res.status(409);
         res.send({
             "request_id": crypto.randomUUID(), //"4e14a4aa-2368-4029-a660-5a883c0c29f1#606",
             "code": 0,

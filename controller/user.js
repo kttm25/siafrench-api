@@ -19,29 +19,34 @@ exports.CreateAccount = async function CreateAccount(req, res){
         const  format = 'base64'
         const apikey = crypto.randomBytes(size).toString(format);
     
+        await database.GetDatabaseData({email: email}).then(result => {
+            if(result != null){
+                response._ErrorConflict(res,  messages.Account_already_exist, messages.error)
+            }else{
+                //Hash password
+                bcrypt.genSalt(10, (err, salt) => {
+                    if(err)    
+                        response._ErrorResponse(res, err.toString(), messages.error)
 
-        //Hash password
-        bcrypt.genSalt(10, (err, salt) => {
-            if(err)    
-                response._ErrorResponse(res, err.toString(), messages.error)
-
-            bcrypt.hash(password, salt, async function(err, hash) {
-                if(err)    
-                    response._ErrorResponse(res, err.toString(), messages.error)
-                    const maxCallAPI = 10000;
-                    // Store hash in the database
-                await database.InsertDatabaseData({email: email, passwordHash: hash, passwordSalt : salt, apiCallRemain: maxCallAPI, apiKey: apikey}).then(result => {
-                    response._SuccessResponse(res, {
-                        _id : result._id, 
-                        email : result.email, 
-                        apikey : result.apikey,
-                        apiCallRemain: 10000,
-                        timestamp: new Date().getTime(),
-                    })
-                }).catch(error => {
-                    response._ErrorResponse(res, error.toString(), messages.error)
+                    bcrypt.hash(password, salt, async function(err, hash) {
+                        if(err)    
+                            response._ErrorResponse(res, err.toString(), messages.error)
+                            const maxCallAPI = 10000;
+                            // Store hash in the database
+                        await database.InsertDatabaseData({email: email, passwordHash: hash, passwordSalt : salt, apiCallRemain: maxCallAPI, apiKey: apikey}).then(result => {
+                            response._SuccessResponse(res, {
+                                _id : result._id, 
+                                email : result.email, 
+                                apikey : result.apikey,
+                                apiCallRemain: 10000,
+                                timestamp: new Date().getTime(),
+                            })
+                        }).catch(error => {
+                            response._ErrorResponse(res, error.toString(), messages.error)
+                        })
+                    });
                 })
-            });
+            }
         })
     }
 }
@@ -55,7 +60,6 @@ exports.Login = async function Login(req, res){
     }else if(!checkfunctions.Password(password)){
         response._ErrorResponse(res, messages.incorrect_parameter, messages.incorrect_parameter)
     }else{
-
         await database.GetDatabaseData({email: email}).then(result => {
             if(result == null){
                 response._ErrorResponse(res,  messages.incorrect_credentials, messages.error)

@@ -13,6 +13,7 @@ const message = require('./utils/messages')
 //Import env variable
 require('dotenv').config();
 
+
 //lib for background task
 var backgroundtask = require('./lib/backgroundtask');
 
@@ -27,7 +28,11 @@ const { Console } = require('console');
 
 var app = express();
 
-app.use(logger('dev'));
+if (process.env.NODE_ENV == 'production') {
+  app.use( logger('combined'));
+} else {
+  app.use(logger('dev'));
+}
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -47,7 +52,7 @@ if(process.env.DATABASE_ENABLE)
 app.use(cors({
   //origin: ['https://www.section.io', 'https://www.google.com/']
   origin: '*',
-  methods: ['GET']
+  methods: ['GET, POST']
 }));
 
 
@@ -62,6 +67,7 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  console.log(err)
   // render the error page
   res.status(err.status || 500);
   res.send(message.syntaxe_error);

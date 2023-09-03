@@ -8,8 +8,8 @@ router.post('/createaccount', function(req, res, next) {
     userController.CreateAccount(req, res)
 });
 
-/* GET login user*/
-router.get('/login', function(req, res, next) {
+/* POST login user*/
+router.post('/login', function(req, res, next) {
     userController.Login(req, res)
 });
 
