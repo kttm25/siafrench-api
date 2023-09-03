@@ -52,7 +52,7 @@ if(process.env.DATABASE_ENABLE)
 app.use(cors({
   //origin: ['https://www.section.io', 'https://www.google.com/']
   origin: '*',
-  methods: ['GET, POST']
+  methods: ['GET', 'POST']
 }));
 
 
