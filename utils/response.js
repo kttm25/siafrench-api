@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-console.log();
 
 // Success response format
 exports._SuccessResponse = function succes(res, data=null, message=null){

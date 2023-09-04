@@ -38,6 +38,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//app.use(cors());
+app.use(cors({
+  //origin: ['https://www.section.io', 'https://www.google.com/']
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+}));
+
+
 //Add controller
 //app.use('/siad', siadRouter);
 app.use('/networkpower', networkPower);
@@ -49,11 +57,6 @@ if(process.env.DATABASE_ENABLE)
   app.use('/user', user);
 
 //Add cors headers
-app.use(cors({
-  //origin: ['https://www.section.io', 'https://www.google.com/']
-  origin: '*',
-  methods: ['GET', 'POST']
-}));
 
 
 // catch 404 and forward to error handler
