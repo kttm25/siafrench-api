@@ -96,25 +96,6 @@ Before using this API, you must install and Sia node to contact Sia network ([In
 
 Then use the following endpoints before accessing the plugins : 
 
-### GET /networkeconomics/miningprofitability
-Get network mining profitability of your node
-
-```
-//Example
- curl --location 'localhost:4000/networkeconomics/miningprofitability'
-```
-
-**Response**
-
-```
-{
-    "request_id": "1e9b6603-1b35-4496-83fa-f2efe26f1ec4",
-    "code": 0,
-    "message": "error.",
-    "data": "Error: Client network socket disconnected before secure TLS connection was established"
-}
-```
-
 ### GET /networkpower/storagestate
 Get all storage state
 
@@ -183,6 +164,175 @@ curl --location 'localhost:4000/networkpower/usageratio'
         "averagestoragesizeperhost": 3199140554938.1816,
         "currentblockchainheight": 7450,
         "timestamp": 1678878309701
+    }
+}
+```
+
+### GET /networkeconomics/miningprofitability
+Get network mining profitability of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkeconomics/miningprofitability'
+```
+
+**Response**
+
+```
+{
+    "request_id": "77eabb6d-f89b-4cb4-b0f4-7bd8c3b9b20a",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "currentprofitabilitybymhs": 165009189.502976,
+        "currentblockchainheight": 434136,
+        "timestamp": 1694089570717,
+        "latestminingblockrewards": [
+            {
+                "value": "30001742610000000000000000000",
+                "unlockhash": "9fbe5e0e17cbaab13a8d0a56c33f32222fc48c9512565184401dea648e786db4cc078b90d8f5"
+            }
+        ]
+    }
+}
+```
+
+### GET /networkeconomics/totalsupply
+Get network totalsupply of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkeconomics/totalsupply'
+```
+
+**Response**
+
+```
+{
+    "request_id": "1e9b6603-1b35-4496-83fa-f2efe26f1ec4",
+    "code": 0,
+    "message": "error.",
+    "data": "Error: Client network socket disconnected before secure TLS connection was established"
+}
+```
+
+### GET /networkeconomics/profitspaidbyrenters
+Get network profits paid by renters of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkeconomics/profitspaidbyrenters'
+```
+
+**Response**
+
+```
+{
+    "request_id": "48458aec-dd4e-4c85-95fe-5eaf318932a6",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "Network_profits_24hrs": 1.1267912515097893e+24,
+        "Network_profits_7days": 2.0912262247755924e+28,
+        "Network_profits_30days": 1.4152292097427778e+29,
+        "timestamp": 1692662358837
+    }
+}
+```
+
+### GET /networkeconomics/siafundprofitability
+Get network Siafund profitability of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkeconomics/siafundprofitability'
+```
+
+**Response**
+
+```
+{
+    "request_id": "48458aec-dd4e-4c85-95fe-5eaf318932a6",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "Network_profits_24hrs": 1.1267912515097893e+24,
+        "Network_profits_7days": 2.0912262247755924e+28,
+        "Network_profits_30days": 1.4152292097427778e+29,
+        "timestamp": 1692662358837
+    }
+}
+```
+
+### GET /networkmining/miningtotalhashrate
+Get network mining total hash rate of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkmining/miningtotalhashrate'
+```
+
+**Response**
+
+```
+{
+    "request_id": "b3582a0c-0eab-4a52-a5dc-c3e1e9bf133a",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "currentnetworkmininghashrate": 1.3285950102336483e+26,
+        "currentnetworkdifficulty": "16543376526631299275",
+        "currentaverageblocktime": 534.8,
+        "currentheight": 434136,
+        "timestamp": 1694091301459
+    }
+}
+```
+
+### GET /networkmining/miningdifficulty
+Get network mining difficulty of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkmining/miningdifficulty'
+```
+
+**Response**
+
+```
+{
+    "request_id": "ec63dcb1-99f8-4550-b5dc-c748ed4bed8e",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "currentminingdifficulty": "16543376526631299275",
+        "currentminingblockreward": "30001742610000000000000000000",
+        "currentheight": 434136,
+        "timestamp": 1694091355736
+    }
+}
+```
+
+### GET /networkstoragemarketplace/storagepricing
+Get network mining difficulty of your node
+
+```
+//Example
+ curl --location 'localhost:4000/networkstoragemarketplace/storagepricing'
+```
+
+**Response**
+
+```
+{
+    "request_id": "be1a9708-7ce6-411a-b5b8-c6939ce8ee80",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "storagepriceperTbpermonth": null,
+        "uploadpriceperTB": null,
+        "dowloadpriceperTB": null,
+        "timestamp": 1694092002789
     }
 }
 ```
