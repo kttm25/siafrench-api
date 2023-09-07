@@ -354,10 +354,10 @@ Get network mining difficulty of your node
     - [x] Add Network Actives Hosts route
     - [x] Add Network Usage Ratio route
     - [x] Add Network Mining Profitability
-    - [ ] Add Network Profits paid by renters route
+    - [x] Add Network Profits paid by renters route
     - [x] Add Network Total Supply route
-    - [ ] Add Network Siafund Profitability route
-    - [ ] Add Network Siafund Distribution route
+    - [x] Add Network Siafund Profitability route
+    - [x] Add Network Siafund Distribution route
     - [x] Add Network Storage Pricing route
     - [ ] Add Network Storage contract route
     - [ ] Add Network Curent distribution route
