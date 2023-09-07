@@ -209,10 +209,15 @@ Get network totalsupply of your node
 
 ```
 {
-    "request_id": "1e9b6603-1b35-4496-83fa-f2efe26f1ec4",
+    "request_id": "9568e540-f9fc-4eec-9401-68a19c73aa9c",
     "code": 0,
-    "message": "error.",
-    "data": "Error: Client network socket disconnected before secure TLS connection was established"
+    "message": "success.",
+    "data": {
+        "totalsiacoinincirculation": 9.465600819904237e+33,
+        "totalburntsiacoin": 8.339849238018064e+30,
+        "currentblockchainheight": 31553,
+        "timestamp": 1692662358837
+    }
 }
 ```
 
