@@ -87,6 +87,7 @@ exports.Login = async function Login(req, res){
     }
 }
 
+//Middle ware
 //Apply API key verification to API Route
 exports.AuthenticateKey = async function authenticateKey(req, res, next){
     //Check if API auth is enable

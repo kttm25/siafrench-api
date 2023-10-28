@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var SiadController = require('../controller/siad')
-var UserController = require("../controller/user");
+var UserController = require("../middleware/user");
 
 
 /* GET network mining Total Hashrate*/

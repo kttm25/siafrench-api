@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var userController = require('../controller/user')
+var userController = require('../middleware/user')
 
 
 /* POST create an new user*/
