@@ -8,5 +8,7 @@ module.exports = {
     "incorrect_credentials" : 'Incorrect credentials',
     "invalid_api_key" : 'Not allowed.',
     "max_api_call" : 'Max API calls exceeded.',
-    "Account_already_exist" : "Account already exist"
+    "account_already_exist" : "Account already exist",
+    "logout_success" : "Successfull logged out",
+    "user_not_logged" : "The user is not logged"
 }

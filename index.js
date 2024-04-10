@@ -24,8 +24,6 @@ var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
 var networkMining = require('./routes/networkMining');
 var user = require('./routes/user');
 
-const { Console } = require('console');
-
 var app = express();
 
 if (process.env.NODE_ENV == 'production') {
