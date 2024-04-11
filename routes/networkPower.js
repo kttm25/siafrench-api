@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var SiadController = require('../controller/siad')
+var SiadController = require('../services/siad')
 var UserController = require("../middleware/user");
 
 
