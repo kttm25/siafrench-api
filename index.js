@@ -23,6 +23,7 @@ var networkEconomics = require('./routes/networkEconomics');
 var networkStorageMarketplace = require('./routes/networkStorageMarketplace');
 var networkMining = require('./routes/networkMining');
 var user = require('./routes/user');
+const { CreateAdminAccount } = require('./middleware/user');
 
 var app = express();
 
@@ -134,11 +135,12 @@ function onError(error) {
 }
 
 //Event listener for HTTP server "listening" event.
-function onListening() {
+async function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
   console.log('Listening on ' + bind)
+  CreateAdminAccount();
 }

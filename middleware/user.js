@@ -1,4 +1,4 @@
-const { InsertDatabaseData, GetDatabaseSingleRecord, FindWithApiKey, UpdateDatabaseData} = require('../lib/database');
+const { InsertDatabaseData, GetDatabaseSingleRecord, FindWithApiKey, UpdateDatabaseData } = require('../lib/database');
 const crypto = require('crypto');
 const bcrypt = require("bcrypt");
 const messages = require("../utils/messages");
@@ -40,7 +40,7 @@ exports.CreateAccount = async function CreateAccount(req, res) {
                                 _id: result._id,
                                 email: result.email,
                                 apikey: result.apikey,
-                                apiCallRemain: 10000,
+                                apiCallRemain: result.apiCallRemain,
                                 timestamp: new Date().getTime(),
                             })
                         }).catch(error => {
@@ -51,6 +51,48 @@ exports.CreateAccount = async function CreateAccount(req, res) {
             }
         })
     }
+}
+
+//Create new user
+exports.CreateAdminAccount = async function CreateAdminAccount(req, res) {
+    //Create random API Key for user
+    const size = 32;
+    const format = 'base64'
+    const apikey = crypto.randomBytes(size).toString(format);
+    const email = "admin@admin.org";
+    const password = process.env.JWT_SECRET_KEY;
+
+    if(process.env.DATABASE_ENABLE != 'true')
+        return false;
+
+    await GetDatabaseSingleRecord({ email: email }, model).then(result => {
+        if (result != null) {
+            //console.log('admin account doin)
+            console.log(`Admin API key is : ${result.apiKey}`);
+            console.log(`Admin API Remain Call : ${result.apiCallRemain}`);
+        } else {
+            //Hash password
+            bcrypt.genSalt(10, (err, salt) => {
+                if (err)
+                    console.log(`Failed to generate Admin salt : ${err}`)
+
+                bcrypt.hash(password, salt, async function (err, hash) {
+                    if (err)
+                        console.log(`Failed to hash password : ${err}`)
+
+                    const maxCallAPI = 1000000000;
+                    // Store hash in the database
+                    await InsertDatabaseData({ email: email, passwordHash: hash, passwordSalt: salt, apiCallRemain: maxCallAPI, apiKey: apikey }, model).then(result1 => {
+
+                        console.log(`Admin API key is : ${result1.apiKey}`);
+                        console.log(`Admin API Remain Call : ${result1.apiCallRemain}`);
+                    }).catch(error => {
+                        console.log(error);
+                    })
+                });
+            })
+        }
+    })
 }
 
 //authentification of user
@@ -117,7 +159,7 @@ exports.user = async (req, res, next) => {
 
         await GetDatabaseSingleRecord({ _id: data._id }, model).then(result => {
             if (result == null) {
-               return response._ErrorResponse(res, messages.incorrect_credentials, messages.error)
+                return response._ErrorResponse(res, messages.incorrect_credentials, messages.error)
             } else {
                 return response._SuccessResponse(
                     res,
