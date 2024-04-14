@@ -1,22 +1,27 @@
 var express = require('express');
 var router = express.Router();
-var SiadController = require('../services/siad')
-var UserController = require("../middleware/user");
+var siadService = require('../services/siad')
+var userService = require("../middleware/user");
 
 
 /* GET network storage state data*/
-router.get('/storagestate', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkStorageState(res)
+router.get('/storagestate', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkStorageState(res)
 });
 
 /* GET network actives hosts data*/
-router.get('/activeshosts', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkActivesHosts(res)
+router.get('/activeshosts', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkActivesHosts(res)
+});
+
+/* GET hosts history data*/
+router.get('/hostshistory', userService.AuthenticateKey, function(req, res, next) {
+    siadService.getHostsHistory(res)
 });
 
 /* GET network usage ratio data*/
-router.get('/usageratio', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkUsageRatio(res)
+router.get('/usageratio', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkUsageRatio(res)
 });
 
 module.exports = router;

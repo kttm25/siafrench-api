@@ -1,24 +1,24 @@
 var express = require('express');
 var router = express.Router();
-var SiadController = require('../services/siad');
-var UserController = require("../middleware/user");
+var siadService = require('../services/siad');
+var userService = require("../middleware/user");
 
 
 /* GET network mining profitability data*/
-router.get('/miningprofitability', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkMiningProfitability(res)
+router.get('/miningprofitability', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkMiningProfitability(res)
 });
 
-router.get('/totalsupply', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkTotalSupply(res)
+router.get('/totalsupply', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkTotalSupply(res)
 });
 
-router.get('/profitspaidbyrenters', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkProfitsPaidByRenters(res)
+router.get('/profitspaidbyrenters', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkProfitsPaidByRenters(res)
 });
 
-router.get('/siafundprofitability', UserController.AuthenticateKey, function(req, res, next) {
-    SiadController.networkSiaFundProfitability(res)
+router.get('/siafundprofitability', userService.AuthenticateKey, function(req, res, next) {
+    siadService.networkSiaFundProfitability(res)
 });
 
 module.exports = router;

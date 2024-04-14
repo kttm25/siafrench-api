@@ -144,6 +144,48 @@ curl --location '34.214.46.107:4000/networkpower/activeshosts'
 }
 ```
 
+### GET /networkpower/hostshistory
+Retrieve hosts history and last top sia hosts
+
+
+```
+//Example
+curl --location '34.214.46.107:4000/networkpower/hostshistory'
+```
+
+**Response**
+```
+{
+    "request_id": "b3c94344-dd20-4f2e-b06b-107aea34cacb",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "topSiaHosts": {
+            "N1": {
+                "totalstorage": 22999994466304,
+                "netaddress": "siabucket4711.ddns.net"
+            },
+            "N2": {
+                "totalstorage": 10752001835008,
+                "netaddress": "sia-test.kuriyasu.net"
+            },
+            "N3": {
+                "totalstorage": 10000000876544,
+                "netaddress": "185.200.116.131"
+            }
+        },
+        "hostsHistory": [
+            [
+                {
+                    "activeHostsNumber": 23,
+                    "timestamp": 1713118200543
+                }
+            ]
+        ]
+    }
+}
+```
+
 ### GET /networkpower/usageratio
 Get current usage ratio of the network
 

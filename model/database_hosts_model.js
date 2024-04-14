@@ -7,6 +7,10 @@ const hostsSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
+    topSiaHosts: { 
+      type: Object,
+      required: true
+    },
     hosts: [
       {
         acceptingcontracts: {
@@ -174,6 +178,10 @@ const hostsSchema = new mongoose.Schema(
 
       }
     ],
+    timestamp: { 
+      type: Number,
+      required: true
+    },
   },
   {
     timestamps: true

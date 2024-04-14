@@ -5,8 +5,9 @@ const response = require("../utils/response")
 const messages = require("../utils/messages")
 const Siad = require('../model/siad');
 const cookieParser = require('cookie-parser');
-const { GetDatabaseData, GetDatabaseLastRecord } = require('../lib/database');
-const model = require('../model/database_network_analysis_model')
+const { GetDatabaseLastRecord, GetDatabaseData } = require('../lib/database');
+const networkAnalysisModel = require('../model/database_network_analysis_model');
+const hostsModel = require('../model/database_hosts_model');
 
 const siad = new Siad({
     host: process.env.SIAD_HOST,
@@ -40,6 +41,52 @@ async function activehosts(res) {
     }).catch(err => {
         response._ErrorResponse(res, err.toString(), messages.error)
     })
+}
+
+exports.getHostsHistory = async (res) => {
+    if (process.env.DATABASE_ENABLE === "true") {
+        await GetDatabaseLastRecord({}, hostsModel).then(async (result) => {
+            if (result == null) {
+                return response._ErrorResponse(res, messages.internal_error, messages.error)
+            } else {
+                await GetDatabaseData({}, hostsModel).then((result1) => {
+                    if (result1 == null) {
+                        return response._ErrorResponse(res, messages.internal_error, messages.error)
+                    } else {
+                        return response._SuccessResponse(
+                            res,
+                            {
+                                topSiaHosts: {
+                                    N1: {
+                                        totalstorage: result.topSiaHosts.N1.totalstorage,
+                                        netaddress: result.topSiaHosts.N1.netaddress.split(':')[0]
+                                    },
+                                    N2: {
+                                        totalstorage: result.topSiaHosts.N2.totalstorage,
+                                        netaddress: result.topSiaHosts.N2.netaddress.split(':')[0]
+                                    },
+                                    N3: {
+                                        totalstorage: result.topSiaHosts.N3.totalstorage,
+                                        netaddress: result.topSiaHosts.N3.netaddress.split(':')[0]
+                                    },
+                                },
+                                hostsHistory: [
+                                    result1.map((hosts) => (
+                                        {
+                                            activeHostsNumber: hosts.activeHostsNumber,
+                                            timestamp: hosts.timestamp
+                                        }
+                                    ))
+                                ]
+                            }
+                        )
+                    }
+                })
+            }
+        })
+    }else{
+        return response._ErrorResponse(res, messages.database_disable, messages.error)
+    }
 }
 
 //Get network storage state
@@ -194,7 +241,7 @@ exports.networkStoragePricing = async function networkStoragePricing(res) {
 
 //Get network total supply
 exports.networkTotalSupply = async function networkTotalSupply(res) {
-    if (!process.env.DATABASE_ENABLE) {
+    if (process.env.DATABASE_ENABLE === 'false') {
         fs.readFile(process.env.FILE_DATA_LOCATION, { encoding: 'utf-8' }, function (err, data) {
             if (!err) {
                 response._SuccessResponse(res, {
@@ -209,7 +256,7 @@ exports.networkTotalSupply = async function networkTotalSupply(res) {
         });
     }
     else {
-        GetDatabaseLastRecord({}, model).then(result => {
+        GetDatabaseLastRecord({}, networkAnalysisModel).then(result => {
             if (result === null) {
                 response._ErrorResponse(res, [], messages.error)
             } else {
@@ -226,7 +273,7 @@ exports.networkTotalSupply = async function networkTotalSupply(res) {
 
 //Get Network Profits Paid By Renters
 exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters(res) {
-    if (!process.env.DATABASE_ENABLE) {
+    if (process.env.DATABASE_ENABLE === "false") {
         fs.readFile(process.env.FILE_DATA_LOCATION, { encoding: 'utf-8' }, function (err, data) {
             if (!err) {
                 response._SuccessResponse(res, {
@@ -240,7 +287,7 @@ exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters
             }
         });
     } else {
-        GetDatabaseLastRecord({}, model).then(result => {
+        GetDatabaseLastRecord({}, networkAnalysisModel).then(result => {
             if (result === null) {
                 response._ErrorResponse(res, [], messages.error)
             } else {
@@ -258,7 +305,7 @@ exports.networkProfitsPaidByRenters = async function networkProfitsPaidByRenters
 
 //Get Network SiadFund Profitability
 exports.networkSiaFundProfitability = async function networkSiaFundProfitability(res) {
-    if (!process.env.DATABASE_ENABLE) {
+    if (process.env.DATABASE_ENABLE === "false") {
         fs.readFile(process.env.FILE_DATA_LOCATION, { encoding: 'utf-8' }, function (err, data) {
             if (!err) {
                 response._SuccessResponse(res, {
@@ -272,7 +319,7 @@ exports.networkSiaFundProfitability = async function networkSiaFundProfitability
             }
         });
     } else {
-        GetDatabaseLastRecord({}, model).then(result => {
+        GetDatabaseLastRecord({}, networkAnalysisModel).then(result => {
             if (result === null) {
                 response._ErrorResponse(res, [], messages.error)
             } else {
