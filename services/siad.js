@@ -70,21 +70,20 @@ exports.getHostsHistory = async (res) => {
                                         netaddress: result.topSiaHosts.N3.netaddress.split(':')[0]
                                     },
                                 },
-                                hostsHistory: [
-                                    result1.map((hosts) => (
-                                        {
-                                            activeHostsNumber: hosts.activeHostsNumber,
-                                            timestamp: hosts.timestamp
-                                        }
-                                    ))
-                                ]
+                                hostsHistory: result1.map((hosts) => (
+                                    {
+                                        activeHostsNumber: hosts.activeHostsNumber,
+                                        timestamp: hosts.timestamp
+                                    }
+                                ))
+
                             }
                         )
                     }
                 })
             }
         })
-    }else{
+    } else {
         return response._ErrorResponse(res, messages.database_disable, messages.error)
     }
 }
