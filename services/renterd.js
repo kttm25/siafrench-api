@@ -3,40 +3,39 @@ const fs = require('fs');
 
 const response = require("../utils/response")
 const messages = require("../utils/messages")
-const Siad = require('../model/siad');
+const Siad = require('../model/renterd');
 const cookieParser = require('cookie-parser');
 const { GetDatabaseLastRecord, GetDatabaseData } = require('../lib/database');
 const networkAnalysisModel = require('../model/database_network_analysis_model');
 const hostsModel = require('../model/database_hosts_model');
 
-const siad = new Siad({
-    host: process.env.SIAD_HOST,
-    agent: process.env.SIAD_AGENT,
-    password: process.env.SIAD_TOKEN
+const renterd = new Siad({
+    host: process.env.RENTERD_HOST,
+    password: process.env.RENTERD_PASSWORD
     // other arguments
 })
 
-//Get result of siad's consensus request
+//Get result of renterd's consensus request
 async function concensus(res) {
-    return siad.siaNetworkData.consensus().then(result => {
+    return renterd.siaNetworkData.consensus().then(result => {
         return result;
     }).catch(err => {
         response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-//Get result of siad's consensus block request
+//Get result of renterd's consensus block request
 async function concensusBlock(res, block) {
-    return await siad.siaNetworkData.consensusblock(block).then(result => {
+    return await renterd.siaNetworkData.consensusblock(block).then(result => {
         return result;
     }).catch(err => {
         response._ErrorResponse(res, err.toString(), messages.error)
     })
 }
 
-//Get result of siad's hostdb active host
+//Get result of renterd's online host
 async function activehosts(res) {
-    return await siad.siaNetworkData.activehosts().then(result => {
+    return await renterd.siaNetworkData.activehosts().then(result => {
         return result;
     }).catch(err => {
         response._ErrorResponse(res, err.toString(), messages.error)
@@ -90,7 +89,7 @@ exports.getHostsHistory = async (res) => {
 
 //Get network storage state
 exports.networkStorageState = async function networkStorageState(res) {
-    siad.siaNetworkData.activehosts().then(result => {
+    renterd.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
             var totalstorage = 0;
             var usedStorage = 0
@@ -99,11 +98,11 @@ exports.networkStorageState = async function networkStorageState(res) {
                 usedStorage += result.hosts[i].remainingstorage
             }
             concensus(res).then(result => {
-                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
+                //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})
                 response._SuccessResponse(res, {
                     totalnetworkstorage: totalstorage,
                     usednetworkstorage: usedStorage,
-                    currentblockchainheight: result.height,
+                    currentblockchainheight: result.blockHeight,
                     timestamp: new Date().getTime()
                 })
             }).catch(err => {
@@ -119,7 +118,7 @@ exports.networkStorageState = async function networkStorageState(res) {
 
 //Get network actives hosts
 exports.networkActivesHosts = async function networkActivesHosts(res) {
-    siad.siaNetworkData.activehosts().then(result => {
+    renterd.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
             var numberactivestorage = result.hosts.length;
             var numberactivestorageACC = 0;
@@ -129,11 +128,11 @@ exports.networkActivesHosts = async function networkActivesHosts(res) {
                 }
             }
             concensus(res).then(result => {
-                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
+                //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})
                 response._SuccessResponse(res, {
                     numberactivestorage: numberactivestorage,
                     numberactivestorageACC: numberactivestorageACC,
-                    currentblockchainheight: result.height,
+                    currentblockchainheight: result.blockHeight,
                     timestamp: new Date().getTime()
                 })
             }).catch(err => {
@@ -152,7 +151,7 @@ exports.networkActivesHosts = async function networkActivesHosts(res) {
 
 //Get network Usage
 exports.networkUsageRatio = async function networkUsageRatio(res) {
-    siad.siaNetworkData.activehosts().then(result => {
+    renterd.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
             var numberactivehosts = result.hosts.length;
             var totalstorage = 0;
@@ -162,11 +161,11 @@ exports.networkUsageRatio = async function networkUsageRatio(res) {
                 usedStorage += result.hosts[i].remainingstorage
             }
             concensus(res).then(result => {
-                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
+                //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})
                 response._SuccessResponse(res, {
                     storageusagepercentage: Number((usedStorage / totalstorage).toFixed(2)),
                     averagestoragesizeperhost: totalstorage / numberactivehosts,
-                    currentblockchainheight: result.height,
+                    currentblockchainheight: result.blockHeight,
                     timestamp: new Date().getTime()
                 })
             }).catch(err => {
@@ -187,12 +186,12 @@ exports.networkMiningProfitability = async function networkMiningProfitability(r
         if (result.data != null) {
             var CurrentProfitabilitybyMhs = result.data.estimated_rewards * 1024 * 1024;
             concensus(res).then(result1 => {
-                //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
-                concensusBlock(res, result1.height).then(result2 => {
-                    //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
+                //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})
+                concensusBlock(res, result1.blockHeight).then(result2 => {
+                    //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})
                     response._SuccessResponse(res, {
                         currentprofitabilitybymhs: CurrentProfitabilitybyMhs,
-                        currentblockchainheight: result1.height,
+                        currentblockchainheight: result1.blockHeight,
                         timestamp: new Date().getTime(),
                         latestminingblockrewards: result2.minerpayouts,
                     })
@@ -212,7 +211,7 @@ exports.networkMiningProfitability = async function networkMiningProfitability(r
 
 //Get Network Storage pricing
 exports.networkStoragePricing = async function networkStoragePricing(res) {
-    siad.siaNetworkData.activehosts().then(result => {
+    renterd.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
             var numberactivehosts = result.hosts.length;
             var SumstoragepriceperTbpermonth = 0;
@@ -336,12 +335,12 @@ exports.networkSiaFundProfitability = async function networkSiaFundProfitability
 //Get Network Mining Total Hashrate
 exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(res) {
     concensus(res).then(result => {
-        //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})    
+        //res.send({totalstorage: totalstorage, currentlyheight: result.blockHeight, requesttimestamp:new Date().getTime()})    
         var difficulty = result.difficulty;
         var timestamp = [];
         var count = 0;
         var blockanalysecount = 5;
-        for (var i = result.height; i > result.height - blockanalysecount; i--) {
+        for (var i = result.blockHeight; i > result.blockHeight - blockanalysecount; i--) {
             concensusBlock(res, i.toString()).then(result1 => {
                 timestamp.push(result1.timestamp);
                 count++;
@@ -364,7 +363,7 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
                         currentnetworkmininghashrate: (difficulty * 2 ** 32) / timeaverage,
                         currentnetworkdifficulty: difficulty,
                         currentaverageblocktime: timeaverage,
-                        currentheight: result.height,
+                        currentheight: result.blockHeight,
                         timestamp: new Date().getTime(),
                     })
                     //console.log(timeaverage)
@@ -382,11 +381,11 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
 exports.networkMiningDifficulty = async function networkMiningDifficulty(res) {
     concensus(res).then(result => {
         //console.log(result)
-        concensusBlock(res, result.height).then(result1 => {
+        concensusBlock(res, result.blockHeight).then(result1 => {
             response._SuccessResponse(res, {
                 currentminingdifficulty: result1.difficulty,
                 currentminingblockreward: result1.minerpayouts[0].value,
-                currentheight: result.height,
+                currentheight: result.blockHeight,
                 timestamp: new Date().getTime(),
             })
         }).catch(err => {

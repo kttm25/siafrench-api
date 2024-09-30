@@ -4,14 +4,13 @@ const axios = require('axios');
 module.exports = class httpRequest{
     constructor(config){
         this.host = config.host;
-        this.agent = config.agent;
         this.password = config.password;
     
         this.polls = {};
         this.timeout = null;
     }
 
-    async normalPostSync(path, payload) {
+    async normalPostSync(path) {
         if (!path) {
             throw errors.InvalidParams();
         }
@@ -23,16 +22,13 @@ module.exports = class httpRequest{
 
         const options = {
             headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'User-Agent': this.agent
+                'content-type': 'application/x-www-form-urlencoded'
             },
             auth: {
                 username: '',
                 password: this.password
             },
         }
-    
-        var response, result;
     
         return await axios.post(this.host + path, data, options)
             .then(res => {
@@ -49,7 +45,7 @@ module.exports = class httpRequest{
         });
     };
 
-    async normalGetSync(path, payload) {
+    async normalGetSync(path) {
         if (!path) {
             throw errors.InvalidParams();
         }
@@ -71,7 +67,6 @@ module.exports = class httpRequest{
                 password: this.password
             }
         }
-        var response, result;
     
         return await axios(config)
             .then(res => {

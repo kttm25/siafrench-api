@@ -2,16 +2,16 @@ var httpRequest = require('../utils/httpRequest');
 
 //Define structure of networkPower object
 module.exports = class SiaNetworkData{
-    constructor(siad){
-        this.httpRequest = new httpRequest(siad);
+    constructor(renterd){
+        this.httpRequest = new httpRequest(renterd);
     }
 
     async activehosts() {
-        return await this.httpRequest.normalGetSync('/hostdb/active');
+        return await this.httpRequest.normalGetSync('/api/bus/hosts');
     };
 
     async consensus() {
-        return await this.httpRequest.normalGetSync('/consensus');
+        return await this.httpRequest.normalGetSync('/api/bus/consensus/state');
     };
     
     async consensusblock(block) {

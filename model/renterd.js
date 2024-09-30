@@ -1,9 +1,9 @@
 
 var Wallet = require('./wallet');
-var SiaNetworkData = require('./siadnetworkdata');
+var SiaNetworkData = require('./renterdnetworkdata');
 
 //Define structure of Siad object
-module.exports = class Siad{
+module.exports = class Renterd{
     constructor(config){
         this.host = config.host,
         this.agent = config.agent,
