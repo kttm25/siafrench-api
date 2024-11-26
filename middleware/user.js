@@ -7,8 +7,6 @@ const checkfunctions = require("../utils/checkfunctions");
 const jwt = require('jsonwebtoken');
 const model = require('../model/database_user_model')
 
-const JWTtokenExpirationTime = process.env.JWT_TOKEN_EXPIRATION_TIME
-
 //Create new user
 exports.CreateAccount = async function CreateAccount(req, res) {
     const email = req.body.email;
@@ -117,7 +115,7 @@ exports.Login = async function Login(req, res) {
                         response._ErrorResponse(res, messages.incorrect_credentials, messages.error)
                     else {
                         const token = jwt.sign({ _id: result._id }, process.env.JWT_SECRET_KEY, {
-                            expiresIn: process.env.JWT_TOKEN_EXPIRATION_TIME | '1d',
+                            expiresIn: process.env.JWT_TOKEN_EXPIRATION_TIME,
                         });
                         // Retrieve Data
                         //Set cookies header
