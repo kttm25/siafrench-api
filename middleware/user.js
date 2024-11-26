@@ -7,6 +7,8 @@ const checkfunctions = require("../utils/checkfunctions");
 const jwt = require('jsonwebtoken');
 const model = require('../model/database_user_model')
 
+const JWTtokenExpirationTime = process.env.JWT_TOKEN_EXPIRATION_TIME
+
 //Create new user
 exports.CreateAccount = async function CreateAccount(req, res) {
     const email = req.body.email;
@@ -21,7 +23,7 @@ exports.CreateAccount = async function CreateAccount(req, res) {
         const format = 'base64'
         const apikey = crypto.randomBytes(size).toString(format);
 
-        await GetDatabaseSingleRecord({ email: email }, model).then(result => {
+        await GetDatabaseSingleRecord({ email: email.toLowerCase() }, model).then(result => {
             if (result != null) {
                 response._ErrorConflict(res, messages.account_already_exist, messages.error)
             } else {
@@ -35,7 +37,7 @@ exports.CreateAccount = async function CreateAccount(req, res) {
                             response._ErrorResponse(res, err.toString(), messages.error)
                         const maxCallAPI = 10000;
                         // Store hash in the database
-                        await InsertDatabaseData({ email: email, passwordHash: hash, passwordSalt: salt, apiCallRemain: maxCallAPI, apiKey: apikey }, model).then(result => {
+                        await InsertDatabaseData({ email: email.toLowerCase(), passwordHash: hash, passwordSalt: salt, apiCallRemain: maxCallAPI, apiKey: apikey }, model).then(result => {
                             response._SuccessResponse(res, {
                                 _id: result._id,
                                 email: result.email,
@@ -65,7 +67,7 @@ exports.CreateAdminAccount = async function CreateAdminAccount(req, res) {
     if(process.env.DATABASE_ENABLE != 'true')
         return false;
 
-    await GetDatabaseSingleRecord({ email: email }, model).then(result => {
+    await GetDatabaseSingleRecord({ email: email.toLowerCase() }, model).then(result => {
         if (result != null) {
             //console.log('admin account doin)
             console.log(`Admin API key is : ${result.apiKey}`);
@@ -82,7 +84,7 @@ exports.CreateAdminAccount = async function CreateAdminAccount(req, res) {
 
                     const maxCallAPI = 1000000000;
                     // Store hash in the database
-                    await InsertDatabaseData({ email: email, passwordHash: hash, passwordSalt: salt, apiCallRemain: maxCallAPI, apiKey: apikey }, model).then(result1 => {
+                    await InsertDatabaseData({ email: email.toLowerCase(), passwordHash: hash, passwordSalt: salt, apiCallRemain: maxCallAPI, apiKey: apikey }, model).then(result1 => {
 
                         console.log(`Admin API key is : ${result1.apiKey}`);
                         console.log(`Admin API Remain Call : ${result1.apiCallRemain}`);
@@ -104,7 +106,7 @@ exports.Login = async function Login(req, res) {
     } else if (checkfunctions.Password(password)) {
         response._ErrorResponse(res, messages.incorrect_parameter, messages.incorrect_parameter)
     } else {
-        await GetDatabaseSingleRecord({ email: email }, model).then(result => {
+        await GetDatabaseSingleRecord({ email: email.toLowerCase() }, model).then(result => {
             if (result == null) {
                 response._ErrorResponse(res, messages.incorrect_credentials, messages.error)
             } else {
@@ -115,7 +117,7 @@ exports.Login = async function Login(req, res) {
                         response._ErrorResponse(res, messages.incorrect_credentials, messages.error)
                     else {
                         const token = jwt.sign({ _id: result._id }, process.env.JWT_SECRET_KEY, {
-                            expiresIn: '1h',
+                            expiresIn: process.env.JWT_TOKEN_EXPIRATION_TIME | '1d',
                         });
                         // Retrieve Data
                         //Set cookies header

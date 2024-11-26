@@ -43,6 +43,15 @@ async function activehosts(res) {
     })
 }
 
+//Get result of siad's hostdb active host
+exports.allHosts = async (res) => {
+    return await siad.siaNetworkData.allhosts().then(result => {
+        response._SuccessResponse(res, result.hosts.length)
+    }).catch(err => {
+        response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
 exports.getHostsHistory = async (res) => {
     if (process.env.DATABASE_ENABLE === "true") {
         await GetDatabaseLastRecord({}, hostsModel).then(async (result) => {

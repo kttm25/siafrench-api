@@ -1,0 +1,17 @@
+services:
+  sia:
+    container_name: sia
+    command: -M gctwhr
+    image: ghcr.io/siafoundation/siad:master-testnet
+    ports:
+      - 127.0.0.1:9680:9880
+      - 9681:9881
+      - 9682:9882
+      - 9683:9883
+      - 9684:9884
+    volumes:
+      - sia-data:/sia-data
+    restart: unless-stopped
+
+volumes:
+  sia-data:

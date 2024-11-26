@@ -10,6 +10,10 @@ module.exports = class SiaNetworkData{
         return await this.httpRequest.normalGetSync('/hostdb/active');
     };
 
+    async allhosts() {
+        return await this.httpRequest.normalGetSync('/hostdb/all');
+    };
+
     async consensus() {
         return await this.httpRequest.normalGetSync('/consensus');
     };

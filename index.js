@@ -39,9 +39,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //app.use(cors());
 app.use(cors({
-  //origin: ['https://www.section.io', 'https://www.google.com/']
-  origin: '*',
+  origin: ['http://localhost:4200', 'http://localhost:5173'],
+  //origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
 }));
 
 
