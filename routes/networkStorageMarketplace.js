@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
 var siadService = require('../services/siad')
-var userService = require("../middleware/user");
+var userMiddleware = require("../middleware/user");
 
 
 /* GET network mining profitability data*/
-router.get('/storagepricing', userService.AuthenticateKey, function(req, res, next) {
+router.get('/storagepricing', userMiddleware.AuthenticateKey, function(req, res, next) {
     siadService.networkStoragePricing(res)
 });
 

@@ -1,26 +1,26 @@
 var express = require('express');
 var router = express.Router();
-var userService = require('../middleware/user')
+var userMiddleware = require('../middleware/user')
 
 
 /* POST create an new user*/
 router.post('/createaccount', function(req, res, next) {
-    userService.CreateAccount(req, res)
+    userMiddleware.CreateAccount(req, res)
 });
 
 /* POST login user*/
 router.post('/login', function(req, res, next) {
-    userService.Login(req, res)
+    userMiddleware.Login(req, res)
 });
 
 /* GET logout user*/
 router.get('/logout', function(req, res, next) {
-    userService.Logout(req, res)
+    userMiddleware.Logout(req, res)
 });
 
 /* GET lgout user*/
 router.get('/getUser', function(req, res, next) {
-    userService.user(req, res)
+    userMiddleware.user(req, res)
 });
 
 module.exports = router;
