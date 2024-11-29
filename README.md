@@ -126,7 +126,7 @@ Retrieve Active hosts on the network
 
 ```
 //Example
-curl --location '34.214.46.107:4000/networkpower/activeshosts'
+curl --location 'localhost:4000/networkpower/activeshosts'
 ```
 
 **Response**
@@ -150,7 +150,7 @@ Retrieve hosts history and last top sia hosts
 
 ```
 //Example
-curl --location '34.214.46.107:4000/networkpower/hostshistory'
+curl --location 'localhost:4000/networkpower/hostshistory'
 ```
 
 **Response**
