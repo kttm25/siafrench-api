@@ -136,9 +136,9 @@ curl --location 'localhost:4000/networkpower/activeshosts'
     "code": 0,
     "message": "success.",
     "data": {
-        "numberactivestorage": 11,
-        "numberactivestorageACC": 11,
-        "currentblockchainheight": 7450,
+        "numberactiveshosts": 22,
+        "numberactivestoragesACC": 22,
+        "currentblockchainheight": 98999,
         "timestamp": 1678878228767
     }
 }

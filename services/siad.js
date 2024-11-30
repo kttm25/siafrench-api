@@ -130,18 +130,18 @@ exports.networkStorageState = async function networkStorageState(res) {
 exports.networkActivesHosts = async function networkActivesHosts(res) {
     siad.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
-            var numberactivestorage = result.hosts.length;
-            var numberactivestorageACC = 0;
+            var numberactiveshosts = result.hosts.length;
+            var numberactivestoragesACC = 0;
             for (var i = 0; i < result.hosts.length; i++) {
                 if (result.hosts[i].acceptingcontracts) {
-                    numberactivestorageACC++;
+                    numberactivestoragesACC++;
                 }
             }
             concensus(res).then(result => {
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
                 response._SuccessResponse(res, {
-                    numberactivestorage: numberactivestorage,
-                    numberactivestorageACC: numberactivestorageACC,
+                    numberactiveshosts: numberactiveshosts,
+                    numberactivestoragesACC: numberactivestoragesACC,
                     currentblockchainheight: result.height,
                     timestamp: new Date().getTime()
                 })
