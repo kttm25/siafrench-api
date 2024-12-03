@@ -144,6 +144,82 @@ curl --location 'localhost:4000/networkpower/activeshosts'
 }
 ```
 
+### GET /networkpower/activeshostslist
+Retrieve Active hosts list on the network
+
+
+```
+//Example
+curl --location 'localhost:4000/networkpower/activeshostslist'
+```
+
+**Response**
+```
+{
+    "request_id": "8848642c-41da-408f-ae71-f77c87e53d20",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "hostslist": [
+            {
+                "netaddress": "justanotherhost.ddns.net:9882",
+                "unlockhash": "f1922aa35f5aa2abc9eca0b0fae93eb79a55932eecf61f3af1c11c717660aeba381c54584240",
+                "acceptingcontracts": true
+            },
+            {
+                "netaddress": "193.149.164.242:9882",
+                "unlockhash": "11d68c52e67a800d0ca99867e410cfa9c0c3f5bc1726aa90e88f40b7ad0825c91841904dae10",
+                "acceptingcontracts": true
+            },
+            {
+                "netaddress": "51.81.242.140:9882",
+                "unlockhash": "3c04215cbc22584f03bccdbbe40c6e1f3ecf0810e6a72661e65b1a1219e32195dc7717c4ee1c",
+                "acceptingcontracts": true
+            }
+        ],
+        "timestamp": 1733197934747
+    }
+}
+```
+
+### GET /networkpower/allhostslist
+Retrieve All hosts list on the network
+
+
+```
+//Example
+curl --location 'localhost:4000/networkpower/allhostslist'
+```
+
+**Response**
+```
+{
+    "request_id": "8848642c-41da-408f-ae71-f77c87e53d20",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "hostslist": [
+            {
+                "netaddress": "justanotherhost.ddns.net:9882",
+                "unlockhash": "f1922aa35f5aa2abc9eca0b0fae93eb79a55932eecf61f3af1c11c717660aeba381c54584240",
+                "acceptingcontracts": true
+            },
+            {
+                "netaddress": "193.149.164.242:9882",
+                "unlockhash": "11d68c52e67a800d0ca99867e410cfa9c0c3f5bc1726aa90e88f40b7ad0825c91841904dae10",
+                "acceptingcontracts": true
+            },
+            {
+                "netaddress": "51.81.242.140:9882",
+                "unlockhash": "3c04215cbc22584f03bccdbbe40c6e1f3ecf0810e6a72661e65b1a1219e32195dc7717c4ee1c",
+                "acceptingcontracts": true
+            }
+        ],
+        "timestamp": 1733197934747
+    }
+}
+```
+
 ### GET /networkpower/hostshistory
 Retrieve hosts history and last top sia hosts
 

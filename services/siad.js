@@ -160,13 +160,36 @@ exports.networkActivesHosts = async function networkActivesHosts(res) {
 }
 
 //Get network actives hosts
-exports.networkActivesHostsList = async function networkActivesHosts(res) {
+exports.networkActivesHostsList = async function networkActivesHostsList(res) {
     siad.siaNetworkData.activehosts().then(result => {
         if (result.hosts != null) {
             response._SuccessResponse(res, {
                 hostslist: result.hosts.map((host)=>({
                     netaddress: host.netaddress,
-                    unlockhash: host.unlockhash
+                    unlockhash: host.unlockhash,
+                    acceptingcontracts: host.acceptingcontracts
+                })),
+                timestamp: new Date().getTime()
+            })
+
+        } else {
+            response._SuccessResponse(res, null, messages.nohostactive)
+        }
+    }).catch(err => {
+        console.log(err)
+        response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
+//Get network actives hosts
+exports.networkAllHostsList = async function networkAllHosts(res) {
+    siad.siaNetworkData.allhosts().then(result => {
+        if (result.hosts != null) {
+            response._SuccessResponse(res, {
+                hostslist: result.hosts.map((host)=>({
+                    netaddress: host.netaddress,
+                    unlockhash: host.unlockhash,
+                    acceptingcontracts: host.acceptingcontracts
                 })),
                 timestamp: new Date().getTime()
             })
