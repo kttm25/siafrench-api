@@ -336,6 +336,44 @@ Get network mining total hash rate of your node
 }
 ```
 
+### GET /networkmining/topminers
+Get network list of top miners
+
+```
+//Example
+ curl --location 'localhost:4000/networkmining/topminers'
+```
+
+**Response**
+
+```
+{
+    "request_id": "b3582a0c-0eab-4a52-a5dc-c3e1e9bf133a",
+    "code": 0,
+    "message": "success.",
+    "data": {
+        "topMiners": [
+            {
+                "minerHash": "000000000000000000000000000000000000000000000000000000000000000089eb0d6a8a69",
+                "iteration": 42053,
+                "_id": "674e5b72cd8b155696b6ba48"
+            },
+            {
+                "minerHash": "fe3a0558966434ad5cda98559cf19782ee824eb93be312ed99a8f946f67a3bb136481a8f2b6f",
+                "iteration": 338,
+                "_id": "674e5b72cd8b155696b6ba49"
+            },
+            {
+                "minerHash": "fb1025a60e1ac25199aad4e48819c5003b455b33e2eb53ee550f0f2a63cd1ae390c218e5bad2",
+                "iteration": 245,
+                "_id": "674e5b72cd8b155696b6ba4a"
+            }
+        ],
+        "timestamp": "1733187809019"
+    }
+}
+```
+
 ### GET /networkmining/miningdifficulty
 Get network mining difficulty of your node
 

@@ -342,6 +342,7 @@ exports.networkSiaFundProfitability = async function networkSiaFundProfitability
     }
 }
 
+
 //Get Network Mining Total Hashrate
 exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(res) {
     concensus(res).then(result => {
@@ -385,6 +386,27 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
     }).catch(err => {
         response._ErrorResponse(res, err.toString(), messages.error)
     })
+}
+
+//Get Network Mining Total Hashrate
+exports.networkMiningTopMiners = async (res) => {
+    if (process.env.DATABASE_ENABLE === "true") {
+        await GetDatabaseLastRecord({}, networkAnalysisModel).then(async (result) => {
+            if (result == null) {
+                return response._ErrorResponse(res, messages.internal_error, messages.error)
+            } else {
+                return response._SuccessResponse(
+                    res,
+                    {
+                        topMiners: result.topMiners.topMiningAddress,
+                        timestamp: result.topMiners.timestamp
+                    }
+                )
+            }
+        })
+    } else {
+        return response._ErrorResponse(res, messages.database_disable, messages.error)
+    }
 }
 
 //Get Network Mining Total Hashrate

@@ -9,6 +9,11 @@ router.get('/miningtotalhashrate', userMiddleware.AuthenticateKey, function(req,
     siadService.networkMiningTotalHashrate(res)
 });
 
+/* GET network mining Total Hashrate*/
+router.get('/topminers', userMiddleware.AuthenticateKey, function(req, res, next) {
+    siadService.networkMiningTopMiners(res)
+});
+
 /* GET network mining difficulty*/
 router.get('/miningdifficulty', userMiddleware.AuthenticateKey, function(req, res, next) {
     siadService.networkMiningDifficulty(res)
