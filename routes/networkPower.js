@@ -14,6 +14,11 @@ router.get('/activeshosts', userMiddleware.AuthenticateKey, function(req, res, n
     siadService.networkActivesHosts(res)
 });
 
+/* GET network actives hosts data*/
+router.get('/activeshostslist', userMiddleware.AuthenticateKey, function(req, res, next) {
+    siadService.networkActivesHostsList(res)
+});
+
 /* GET hosts history data*/
 router.get('/hostshistory', userMiddleware.AuthenticateKey, function(req, res, next) {
     siadService.getHostsHistory(res)

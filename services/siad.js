@@ -159,6 +159,27 @@ exports.networkActivesHosts = async function networkActivesHosts(res) {
     })
 }
 
+//Get network actives hosts
+exports.networkActivesHostsList = async function networkActivesHosts(res) {
+    siad.siaNetworkData.activehosts().then(result => {
+        if (result.hosts != null) {
+            response._SuccessResponse(res, {
+                hostslist: result.hosts.map((host)=>({
+                    netaddress: host.netaddress,
+                    unlockhash: host.unlockhash
+                })),
+                timestamp: new Date().getTime()
+            })
+
+        } else {
+            response._SuccessResponse(res, null, messages.nohostactive)
+        }
+    }).catch(err => {
+        console.log(err)
+        response._ErrorResponse(res, err.toString(), messages.error)
+    })
+}
+
 //Get network Usage
 exports.networkUsageRatio = async function networkUsageRatio(res) {
     siad.siaNetworkData.activehosts().then(result => {
@@ -388,7 +409,7 @@ exports.networkMiningTotalHashrate = async function networkMiningTotalHashrate(r
     })
 }
 
-//Get Network Mining Total Hashrate
+//Get Network Mining Top Miners
 exports.networkMiningTopMiners = async (res) => {
     if (process.env.DATABASE_ENABLE === "true") {
         await GetDatabaseLastRecord({}, networkAnalysisModel).then(async (result) => {
@@ -409,7 +430,7 @@ exports.networkMiningTopMiners = async (res) => {
     }
 }
 
-//Get Network Mining Total Hashrate
+//Get Network Mining Difficulty
 exports.networkMiningDifficulty = async function networkMiningDifficulty(res) {
     concensus(res).then(result => {
         //console.log(result)
