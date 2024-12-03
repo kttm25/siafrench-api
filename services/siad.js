@@ -111,7 +111,7 @@ exports.networkStorageState = async function networkStorageState(res) {
                 //res.send({totalstorage: totalstorage, currentlyheight: result.height, requesttimestamp:new Date().getTime()})
                 response._SuccessResponse(res, {
                     totalnetworkstorage: totalstorage,
-                    usednetworkstorage: usedStorage,
+                    usednetworkstorage: totalstorage - usedStorage,
                     currentblockchainheight: result.height,
                     timestamp: new Date().getTime()
                 })
