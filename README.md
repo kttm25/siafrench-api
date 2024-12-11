@@ -248,6 +248,10 @@ curl --location 'localhost:4000/networkpower/hostshistory'
             "N3": {
                 "totalstorage": 10000000876544,
                 "netaddress": "185.200.116.131"
+            },
+            "N4": {
+                "totalstorage": 10000000876544,
+                "netaddress": "shtn4.leet.haus"
             }
         },
         "hostsHistory": [

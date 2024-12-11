@@ -78,6 +78,10 @@ exports.getHostsHistory = async (res) => {
                                         totalstorage: result.topSiaHosts.N3.totalstorage,
                                         netaddress: result.topSiaHosts.N3.netaddress.split(':')[0]
                                     },
+                                    N4: {
+                                        totalstorage: result.topSiaHosts.N4.totalstorage,
+                                        netaddress: result.topSiaHosts.N4.netaddress.split(':')[0]
+                                    },
                                 },
                                 hostsHistory: result1.map((hosts) => (
                                     {
